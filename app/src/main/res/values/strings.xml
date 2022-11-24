@@ -1,6 +1,3 @@
 <resources>
-    <string name="app_name">Restaurant</string>
-    <string name="menu_string">Menu</string>
-    <string name="product_string">Product</string>
-
+    <string name="app_name">TestOracle</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.restaurant;
+package com.example.testoracle;
 
 import org.junit.Test;
 
