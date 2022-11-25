@@ -1,5 +1,12 @@
 package com.example.testoracle.entity;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class User {
 
     private int id;
@@ -17,6 +24,18 @@ public class User {
         this.email = email;
         this.password = password;
         this.date_of_birth = date_of_birth;
+    }
+
+    public User(String username, String firstname, String lastname, String email, String password, Date date_of_birth) {
+        this.username = username;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.password = password;
+        String pattern = "dd-MM-yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        this.date_of_birth = simpleDateFormat.format(date_of_birth);
     }
 
     public int getId() {
@@ -73,5 +92,31 @@ public class User {
 
     public void setDate_of_birth(String date_of_birth) {
         this.date_of_birth = date_of_birth;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(obj instanceof User){
+            User objuser = (User) obj;
+
+            if (objuser.getUsername().equals(this.getUsername()) &&
+                objuser.getFirstname().equals(this.getFirstname()) &&
+                    objuser.getLastname().equals(this.getLastname()) &&
+                    objuser.getEmail().equals(this.getEmail()) &&
+                    objuser.getPassword().equals(this.getPassword()) &&
+                    objuser.getDate_of_birth().equals(this.getDate_of_birth())
+            )
+                return true;
+            return false;
+        }
+        else return false;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Username:" + username + "\n" + "FirstName:" + firstname + "\n"+
+                "LastName:" + lastname + "\n" + "Email:" + email + "\n" + "Password:"+
+                password + "\n" + "DateOfBirth" + date_of_birth + "\n";
     }
 }

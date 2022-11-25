@@ -7,6 +7,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class UserDAO {
     }
 
     //create a user in the database given an object of type user as a parameter
-    public void createUser(User user) throws SQLException {
+    public boolean createUser(User user) throws SQLException {
         String statementQuery = "INSERT INTO utilizator VALUES (?,?,?,?,?,?,TO_DATE(?,'DD-MM-YYYY'))";
 
         PreparedStatement statement = connection.prepareStatement(statementQuery);
@@ -46,8 +47,13 @@ public class UserDAO {
         statement.setString(6, user.getPassword());
         statement.setString(7, user.getDate_of_birth());
 
-        statement.executeUpdate();
-        connection.commit();
+        try{
+            statement.executeUpdate();
+            connection.commit();
+        }catch (SQLException e){
+            return false;
+        }
+        return true;
     }
 
     //get a list of all users in the database
@@ -59,7 +65,7 @@ public class UserDAO {
         while (resultSet.next()){
             User user = new User(resultSet.getString(2), resultSet.getString(3),
                     resultSet.getString(4), resultSet.getString(5),
-                    resultSet.getString(6), resultSet.getDate(7).toString());
+                    resultSet.getString(6), resultSet.getDate(7));
             user.setId(resultSet.getInt(1));
             userList.add(user);
         }
@@ -78,15 +84,15 @@ public class UserDAO {
         while (resultSet.next()){
             user = new User(resultSet.getString(2), resultSet.getString(3),
                     resultSet.getString(4), resultSet.getString(5),
-                    resultSet.getString(6), resultSet.getDate(7).toString());
+                    resultSet.getString(6), resultSet.getDate(7));
             user.setId(resultSet.getInt(1));
             break;
         }
         return user;
     }
 
-    public User getUserByName(String firstName, String lastName) throws SQLException {
-        User user = null;
+    public List<User> getUserByName(String firstName, String lastName) throws SQLException {
+        List<User> users = new ArrayList<>();
 
         String query = "SELECT * FROM utilizator WHERE firstname = ? and lastname = ?";
         PreparedStatement statement = connection.prepareStatement(query);
@@ -96,13 +102,14 @@ public class UserDAO {
         ResultSet resultSet = statement.executeQuery();
 
         while (resultSet.next()){
-            user = new User(resultSet.getString(2), resultSet.getString(3),
+            User user = new User(resultSet.getString(2), resultSet.getString(3),
                     resultSet.getString(4), resultSet.getString(5),
-                    resultSet.getString(6), resultSet.getDate(7).toString());
+                    resultSet.getString(6), resultSet.getDate(7));
             user.setId(resultSet.getInt(1));
+            users.add(user);
             break;
         }
-        return user;
+        return users;
     }
 
     public User getUserByEmail(String email) throws SQLException {
@@ -114,13 +121,13 @@ public class UserDAO {
 
         ResultSet resultSet = statement.executeQuery();
 
-        while (resultSet.next()){
-            user = new User(resultSet.getString(2), resultSet.getString(3),
+        resultSet.next();
+        user = new User(resultSet.getString(2), resultSet.getString(3),
                     resultSet.getString(4), resultSet.getString(5),
-                    resultSet.getString(6), resultSet.getDate(7).toString());
-            user.setId(resultSet.getInt(1));
-            break;
-        }
+                    resultSet.getString(6), resultSet.getDate(7));
+        user.setId(resultSet.getInt(1));
+
+
         return user;
     }
 
@@ -133,13 +140,13 @@ public class UserDAO {
 
         ResultSet resultSet = statement.executeQuery();
 
-        while (resultSet.next()){
-            user = new User(resultSet.getString(2), resultSet.getString(3),
+        resultSet.next();
+
+        user = new User(resultSet.getString(2), resultSet.getString(3),
                     resultSet.getString(4), resultSet.getString(5),
-                    resultSet.getString(6), resultSet.getDate(7).toString());
-            user.setId(resultSet.getInt(1));
-            break;
-        }
+                    resultSet.getString(6), resultSet.getDate(7));
+        user.setId(resultSet.getInt(1));
+
         return user;
     }
 
