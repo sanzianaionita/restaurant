@@ -21,8 +21,8 @@
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="buttonConnectToOracleDB"
-        android:text="Connect to database"
+        android:onClick="buttonAddUserTest"
+        android:text="testAddUser"
         tools:layout_editor_absoluteX="98dp"
         tools:layout_editor_absoluteY="198dp" />
 

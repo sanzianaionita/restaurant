@@ -8,9 +8,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.testoracle.DAO.UserDAO;
+import com.example.testoracle.entity.User;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,9 +36,7 @@ public class MainActivity extends AppCompatActivity {
         textView = findViewById(R.id.textView);
         StrictMode.ThreadPolicy threadPolicy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(threadPolicy);
-    }
 
-    public void buttonConnectToOracleDB(View view){
         try {
             Class.forName(DRIVER);
             this.connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
@@ -47,10 +49,34 @@ public class MainActivity extends AppCompatActivity {
                 stringBuffer.append(resultSet.getString(1) + " " + resultSet.getString(2) +"\n");
             }
             textView.setText(stringBuffer.toString());
-            connection.close();
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void buttonAddUserTest(View view){
+        try {
+
+            UserDAO userDAO = new UserDAO(connection);
+
+            userDAO.createUser(new User("testttt","test","test","testtt","test", "25-03-2022"));
+
+            Statement statement = connection.createStatement();
+            StringBuffer stringBuffer = new StringBuffer();
+            ResultSet resultSet = statement.executeQuery("select * from utilizator");
+            while (resultSet.next()){
+                stringBuffer.append(resultSet.getString(1) + " " + resultSet.getString(2) +"\n");
+            }
+            textView.setText(stringBuffer.toString());
+
         }
         catch (Exception e){
             textView.setText(e.toString());
         }
     }
+
+
 }
