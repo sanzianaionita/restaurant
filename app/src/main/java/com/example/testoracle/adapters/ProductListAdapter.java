@@ -2,21 +2,16 @@ package com.example.testoracle.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.testoracle.MainActivity;
 import com.example.testoracle.R;
-import com.example.testoracle.activities.products.ProductActivity;
 import com.example.testoracle.entity.Product;
 
 import java.util.HashMap;
@@ -69,7 +64,6 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
         });
         return convertView;
     }
-
 
 
     @Nullable

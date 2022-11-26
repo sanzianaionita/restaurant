@@ -1,7 +1,6 @@
 package com.example.testoracle.DAO;
 
 import com.example.testoracle.entity.Product;
-import com.example.testoracle.entity.User;
 import com.example.testoracle.enums.ProductType;
 
 import java.sql.Connection;

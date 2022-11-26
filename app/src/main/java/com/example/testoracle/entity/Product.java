@@ -1,7 +1,5 @@
 package com.example.testoracle.entity;
 
-import com.example.testoracle.enums.ProductType;
-
 import java.util.Objects;
 
 public class Product {
@@ -18,7 +16,7 @@ public class Product {
 
     private Integer productQuantity;
 
-    public Product(){
+    public Product() {
 
     }
 

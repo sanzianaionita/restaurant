@@ -51,8 +51,6 @@ public class ProductTypeAdapter extends ArrayAdapter<String> {
                 break;
         }
 
-
-
         return convertView;
     }
 
