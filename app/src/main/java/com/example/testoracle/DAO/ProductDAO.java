@@ -72,6 +72,68 @@ public class ProductDAO {
         return productsByType;
     }
 
+    public Product getProductById(int id) throws SQLException {
+
+        String query = "select * from product where id=?";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1, id);
+
+        ResultSet resultSet = statement.executeQuery();
+
+        if (resultSet.next()) {
+            Product product = new Product(resultSet.getString(2),
+                    resultSet.getString(3),
+                    resultSet.getDouble(4),
+                    resultSet.getInt(5),
+                    resultSet.getString(6));
+            return product;
+        }
+        return null;
+
+    }
+
+    public Product updateProductById(int id, Product product) throws SQLException {
+
+        Product productById = getProductById(id);
+
+        if (productById != null) {
+            String query = "update product set id=?, product_name=?, product_description=?, product_price=?, product_quantity=?, product_type=? " +
+                    "where id=?";
+
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+            statement.setString(2, product.getProductName());
+            statement.setString(3, product.getProductDescription());
+            statement.setDouble(4, product.getProductPrice());
+            statement.setInt(5, product.getProductQuantity());
+            statement.setString(6, product.getProductType());
+            statement.setInt(7, id);
+
+            statement.executeUpdate();
+            connection.commit();
+
+            return getProductById(id);
+        }
+        return null;
+
+    }
+
+    public void deleteProductById(int id) throws SQLException {
+
+        Product productById = getProductById(id);
+
+        if (productById != null) {
+            String query = "delete from product where id=?";
+
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+
+            statement.executeUpdate();
+            connection.commit();
+
+        }
+    }
+
     private List<Product> generateInitialListOfProducts() {
 
         Product product1 = new Product("Pizza Margherita", "sos de rosii si mozarella", 38.00, 25, ProductType.PIZZA.getCode());
