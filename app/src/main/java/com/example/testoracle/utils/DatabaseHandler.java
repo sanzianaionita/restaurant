@@ -7,9 +7,15 @@ import java.sql.SQLException;
 public class DatabaseHandler {
 
     private static final String DRIVER = "oracle.jdbc.driver.OracleDriver";
+<<<<<<< Updated upstream
     private static final String URL = "jdbc:oracle:thin:@192.168.1.135:1521:XE";
     private static final String USERNAME = "restaurant";
     private static final String PASSWORD = "restaurant";
+=======
+    private static final String URL = "jdbc:oracle:thin:@192.168.1.129:1521:XE";
+    private static final String USERNAME = "CTXSYS";
+    private static final String PASSWORD = "CTXSYS";
+>>>>>>> Stashed changes
 
     private static Connection connection;
 
