@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView textView;
     private Connection connection;
-    private Button buttonOrder, buttonReservation;
+    private Button buttonOrder, buttonReservation, buttonfav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         Button button = findViewById(R.id.navigateToProductTypeButton);
         buttonOrder = findViewById(R.id.testAddOrder);
         buttonReservation = findViewById(R.id.testAddReseravtion);
+        buttonfav = findViewById(R.id.buttonfav);
 
 
         StrictMode.ThreadPolicy threadPolicy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -95,6 +96,25 @@ public class MainActivity extends AppCompatActivity {
                     }
                     textView.setText(stringBuffer.toString());
 
+                } catch (Exception e) {
+                    textView.setText(e.toString());
+                }
+            }
+        });
+
+        buttonfav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Log.v("buttonaddfav","buton de adaugat la fav");
+                try {
+                    connection = DatabaseHandler.createDbConn();
+                    Statement statement = connection.createStatement();
+                    StringBuffer stringBuffer = new StringBuffer();
+                    ResultSet resultSet = statement.executeQuery("select p.product_name from product p, favorit f, utilizator u where u.id=1 and f.product_id=p.id");
+                    while (resultSet.next()) {
+                        stringBuffer.append(resultSet.getString(1) + "\n");
+                    }
+                    textView.setText(stringBuffer.toString());
                 } catch (Exception e) {
                     textView.setText(e.toString());
                 }
