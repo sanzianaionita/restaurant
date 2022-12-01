@@ -12,9 +12,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.testoracle.DAO.OrderDAO;
+import com.example.testoracle.DAO.ReservationDAO;
 import com.example.testoracle.DAO.UserDAO;
 import com.example.testoracle.activities.products.ProductTypeActivity;
 import com.example.testoracle.entity.Order;
+import com.example.testoracle.entity.Reservation;
 import com.example.testoracle.entity.User;
 import com.example.testoracle.enums.OrderStatus;
 import com.example.testoracle.utils.DatabaseHandler;
@@ -28,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView textView;
     private Connection connection;
-    private Button buttonOrder;
+    private Button buttonOrder, buttonReservation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         textView = findViewById(R.id.textView);
         Button button = findViewById(R.id.navigateToProductTypeButton);
         buttonOrder = findViewById(R.id.testAddOrder);
+        buttonReservation = findViewById(R.id.testAddReseravtion);
+
 
         StrictMode.ThreadPolicy threadPolicy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(threadPolicy);
@@ -73,6 +77,30 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        buttonReservation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    connection = DatabaseHandler.createDbConn();
+                    ReservationDAO reservationDAO = new ReservationDAO(connection);
+                    Reservation reservation = new Reservation( 1, "25-03-2022", 5, 18, 4, "niste detalii uuu");
+                    reservationDAO.createReservation(reservation);
+                    Log.v("testReservation1", reservation.getDetails());
+                    Statement statement = connection.createStatement();
+                    StringBuffer stringBuffer = new StringBuffer();
+                    ResultSet resultSet = statement.executeQuery("select * from rezervare");
+
+                    while (resultSet.next()) {
+                        stringBuffer.append(resultSet.getInt(1) + " " + resultSet.getInt(2) + " " + resultSet.getString(3) + " " + resultSet.getInt(4) +  "\n");
+                    }
+                    textView.setText(stringBuffer.toString());
+
+                } catch (Exception e) {
+                    textView.setText(e.toString());
+                }
+            }
+        });
+
     }
 
     public void buttonAddUserTest(View view) {
@@ -94,6 +122,10 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             textView.setText(e.toString());
         }
+    }
+
+    public void buttonAddReservationTest(View view) {
+
     }
 
 }

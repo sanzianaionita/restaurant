@@ -20,6 +20,7 @@ import java.util.Map;
 
 public class ProductListAdapter extends ArrayAdapter<Product> {
     Map<String, Boolean> favouriteItems = new HashMap<>();
+    ImageButton buttonAddToCart;
 
     public ProductListAdapter(Context context, List<Product> productTypes) {
         super(context, 0, productTypes);
@@ -57,7 +58,7 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
             }
         });
 
-        ImageButton buttonAddToCart = convertView.findViewById(R.id.cartImageButton);
+        buttonAddToCart = convertView.findViewById(R.id.cartImageButton);
 
         buttonAddToCart.setOnClickListener(view -> {
 

@@ -38,18 +38,25 @@ public class OrderDAO {
 
     //create an order in the database given an object of type order as a parameter
     public boolean createOrder(Order order) throws SQLException {
-        String statementQuery = "INSERT INTO comanda VALUES (?,?,TO_DATE(?,'DD-MM-YYYY'),?,?,?)";
+        String statementQuery;
+        if(order.getDescription() != null){
+            statementQuery = "INSERT INTO comanda VALUES (?,?,TO_DATE(?,'DD-MM-YYYY'),?,?,?)";
+        } else{
+            statementQuery = "INSERT INTO comanda VALUES (?,?,TO_DATE(?,'DD-MM-YYYY'),?,?)";
+        }
 
         PreparedStatement statement = connection.prepareStatement(statementQuery);
         Log.v("test","test1992111");
         int id = getLastID();
-        int tt = 120;
-        statement.setInt(1, tt);
+        statement.setInt(1, id );
         statement.setInt(2, order.getUserId());
         statement.setString(3, order.getDate());
         statement.setString(4, order.getStatus());
         statement.setString(5, order.getAddress());
-        statement.setString(6, order.getDescription());
+        if(order.getDescription() != null){
+            statement.setString(6, order.getDescription());
+        }
+
         Log.v("test19",String.valueOf(order.getUserId())+String.valueOf(order.getUserId())+order.getStatus()+order.getDate()+order.getAddress()+order.getDescription()) ;
         Log.v("test","test19922222");
         try{
@@ -74,8 +81,11 @@ public class OrderDAO {
         ResultSet resultSet = statement.executeQuery("SELECT * FROM comanda");
         while (resultSet.next()){
             Order order = new Order(0, resultSet.getInt(2), resultSet.getString(3),
-                    resultSet.getString(4), resultSet.getString(5), resultSet.getString(6));
+                    resultSet.getString(4), resultSet.getString(5));
             order.setId(resultSet.getInt(1));
+            if(resultSet.getString(6) != null){
+                order.setDescription(resultSet.getString(6));
+            }
             orderList.add(order);
         }
         return orderList;
@@ -88,8 +98,11 @@ public class OrderDAO {
         ResultSet resultSet = statement.executeQuery("SELECT * FROM comanda WHERE status = 'delivering'");
         while (resultSet.next()){
             Order order = new Order(0, resultSet.getInt(2), resultSet.getString(3),
-                    resultSet.getString(4), resultSet.getString(5), resultSet.getString(6));
+                    resultSet.getString(4), resultSet.getString(5));
             order.setId(resultSet.getInt(1));
+            if(resultSet.getString(6) != null){
+                order.setDescription(resultSet.getString(6));
+            }
             orderList.add(order);
         }
         return orderList;
@@ -102,8 +115,11 @@ public class OrderDAO {
         ResultSet resultSet = statement.executeQuery("SELECT * FROM comanda WHERE status = 'done'");
         while (resultSet.next()){
             Order order = new Order(0, resultSet.getInt(2), resultSet.getString(3),
-                    resultSet.getString(4), resultSet.getString(5), resultSet.getString(6));
+                    resultSet.getString(4), resultSet.getString(5));
             order.setId(resultSet.getInt(1));
+            if(resultSet.getString(6) != null){
+                order.setDescription(resultSet.getString(6));
+            }
             orderList.add(order);
         }
         return orderList;
@@ -118,8 +134,11 @@ public class OrderDAO {
         ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()){
             Order order = new Order(0, resultSet.getInt(2), resultSet.getString(3),
-                    resultSet.getString(4), resultSet.getString(5), resultSet.getString(6));
+                    resultSet.getString(4), resultSet.getString(5));
             order.setId(resultSet.getInt(1));
+            if(resultSet.getString(6) != null){
+                order.setDescription(resultSet.getString(6));
+            }
             orderList.add(order);
         }
         return orderList;
@@ -136,9 +155,11 @@ public class OrderDAO {
 
         while (resultSet.next()){
             order = new Order(0, resultSet.getInt(2), resultSet.getString(3),
-                    resultSet.getString(4), resultSet.getString(5),
-                    resultSet.getString(6));
+                    resultSet.getString(4), resultSet.getString(5));
             order.setId(resultSet.getInt(1));
+            if(resultSet.getString(6) != null){
+                order.setDescription(resultSet.getString(6));
+            }
             break;
         }
         return order;
@@ -153,8 +174,11 @@ public class OrderDAO {
         ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()){
             Order order = new Order(0, resultSet.getInt(2), resultSet.getString(3),
-                    resultSet.getString(4), resultSet.getString(5), resultSet.getString(6));
+                    resultSet.getString(4), resultSet.getString(5));
             order.setId(resultSet.getInt(1));
+            if(resultSet.getString(6) != null){
+                order.setDescription(resultSet.getString(6));
+            }
             orderList.add(order);
         }
         return orderList;
@@ -169,8 +193,11 @@ public class OrderDAO {
         ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()){
             Order order = new Order(0, resultSet.getInt(2), resultSet.getString(3),
-                    resultSet.getString(4), resultSet.getString(5), resultSet.getString(6));
+                    resultSet.getString(4), resultSet.getString(5));
             order.setId(resultSet.getInt(1));
+            if(resultSet.getString(6) != null){
+                order.setDescription(resultSet.getString(6));
+            }
             orderList.add(order);
         }
         return orderList;
@@ -191,7 +218,7 @@ public class OrderDAO {
         connection.commit();
     }
 
-    public void deleteUserByID(int id) throws SQLException {
+    public void deleteOrderByID(int id) throws SQLException {
         String query = "DELETE FROM comanda WHERE id = ?";
         PreparedStatement statement = connection.prepareStatement(query);
         statement.setInt(1, id);
