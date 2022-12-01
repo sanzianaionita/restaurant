@@ -6,6 +6,7 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,15 +30,19 @@ public class MainActivity extends AppCompatActivity {
     private TextView textView;
     private Connection connection;
     private Button buttonOrder;
-
+    private Button buttonFav;
+//    private ImageButton buttonaddfav;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+//        LayoutInflater inflater = getLayoutInflater();
+//        View product_list_view = inflater.inflate(R.layout.product_list_view, null);
         textView = findViewById(R.id.textView);
         Button button = findViewById(R.id.navigateToProductTypeButton);
         buttonOrder = findViewById(R.id.testAddOrder);
+        buttonFav = findViewById(R.id.testfav);
+        //buttonaddfav = product_list_view.findViewById(favouriteImageButton);
 
         StrictMode.ThreadPolicy threadPolicy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(threadPolicy);
@@ -69,6 +74,24 @@ public class MainActivity extends AppCompatActivity {
 
                 } catch (Exception e) {
                     textView.setText(e.toString());
+                }
+            }
+        });
+        buttonFav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Log.v("buttonaddfav","buton de adaugat la fav");
+                try {
+                    connection = DatabaseHandler.createDbConn();
+                    Statement statement = connection.createStatement();
+                    StringBuffer stringBuffer = new StringBuffer();
+                    ResultSet resultSet = statement.executeQuery("select p.product_name from product p, favorit f, utilizator u where u.id=1 and f.product_id=p.id");
+                    while (resultSet.next()) {
+                        stringBuffer.append(resultSet.getString(1) + "\n");
+                    }
+                    //textView.setText(stringBuffer.toString());
+                } catch (Exception e) {
+                    //textView.setText(e.toString());
                 }
             }
         });
