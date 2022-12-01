@@ -6,16 +6,17 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.testoracle.DAO.OrderDAO;
+import com.example.testoracle.DAO.ReservationDAO;
 import com.example.testoracle.DAO.UserDAO;
 import com.example.testoracle.activities.products.ProductTypeActivity;
 import com.example.testoracle.entity.Order;
+import com.example.testoracle.entity.Reservation;
 import com.example.testoracle.entity.User;
 import com.example.testoracle.enums.OrderStatus;
 import com.example.testoracle.utils.DatabaseHandler;
@@ -29,20 +30,18 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView textView;
     private Connection connection;
-    private Button buttonOrder;
-    private Button buttonFav;
-//    private ImageButton buttonaddfav;
+    private Button buttonOrder, buttonReservation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        LayoutInflater inflater = getLayoutInflater();
-//        View product_list_view = inflater.inflate(R.layout.product_list_view, null);
+
         textView = findViewById(R.id.textView);
         Button button = findViewById(R.id.navigateToProductTypeButton);
         buttonOrder = findViewById(R.id.testAddOrder);
-        buttonFav = findViewById(R.id.testfav);
-        //buttonaddfav = product_list_view.findViewById(favouriteImageButton);
+        buttonReservation = findViewById(R.id.testAddReseravtion);
+
 
         StrictMode.ThreadPolicy threadPolicy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(threadPolicy);
@@ -77,21 +76,27 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        buttonFav.setOnClickListener(new View.OnClickListener() {
+
+        buttonReservation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Log.v("buttonaddfav","buton de adaugat la fav");
                 try {
                     connection = DatabaseHandler.createDbConn();
+                    ReservationDAO reservationDAO = new ReservationDAO(connection);
+                    Reservation reservation = new Reservation( 1, "25-03-2022", 5, 18, 4, "niste detalii uuu");
+                    reservationDAO.createReservation(reservation);
+                    Log.v("testReservation1", reservation.getDetails());
                     Statement statement = connection.createStatement();
                     StringBuffer stringBuffer = new StringBuffer();
-                    ResultSet resultSet = statement.executeQuery("select p.product_name from product p, favorit f, utilizator u where u.id=1 and f.product_id=p.id");
+                    ResultSet resultSet = statement.executeQuery("select * from rezervare");
+
                     while (resultSet.next()) {
-                        stringBuffer.append(resultSet.getString(1) + "\n");
+                        stringBuffer.append(resultSet.getInt(1) + " " + resultSet.getInt(2) + " " + resultSet.getString(3) + " " + resultSet.getInt(4) +  "\n");
                     }
-                    //textView.setText(stringBuffer.toString());
+                    textView.setText(stringBuffer.toString());
+
                 } catch (Exception e) {
-                    //textView.setText(e.toString());
+                    textView.setText(e.toString());
                 }
             }
         });
@@ -117,6 +122,10 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             textView.setText(e.toString());
         }
+    }
+
+    public void buttonAddReservationTest(View view) {
+
     }
 
 }

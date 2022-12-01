@@ -41,28 +41,24 @@
         app:layout_constraintTop_toBottomOf="@+id/navigateToProductTypeButton" />
 
     <Button
-        android:id="@+id/testfav"
+        android:id="@+id/testAddReseravtion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="132dp"
         android:layout_marginTop="20dp"
-        android:onClick="buttonAddUserTest"
-        android:text="Favorite"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        android:text="buttonAddReservationTest"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/testAddOrder"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/testAddOrder" />
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="182dp"
-        android:layout_height="148dp"
-        android:layout_marginTop="128dp"
-        android:text="Hello World!"
+        android:layout_width="207dp"
+        android:layout_height="446dp"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/testAddOrder" />
+        android:text="Hello World!"
+        app:layout_constraintStart_toStartOf="@id/testAddReseravtion"
+        app:layout_constraintTop_toBottomOf="@id/testAddReseravtion"
+        app:layout_constraintVertical_bias="0.863"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
