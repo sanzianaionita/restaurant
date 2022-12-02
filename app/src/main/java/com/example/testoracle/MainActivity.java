@@ -82,10 +82,23 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try {
+                    /*
                     connection = DatabaseHandler.createDbConn();
                     ReservationDAO reservationDAO = new ReservationDAO(connection);
                     Reservation reservation = new Reservation( 1, "25-03-2022", 5, 18, 4, "niste detalii uuu");
                     reservationDAO.createReservation(reservation);
+                    Log.v("testReservation1", reservation.getDetails());
+                    Statement statement = connection.createStatement();
+                    StringBuffer stringBuffer = new StringBuffer();
+                    ResultSet resultSet = statement.executeQuery("select * from rezervare");
+
+                    while (resultSet.next()) {
+                        stringBuffer.append(resultSet.getInt(1) + " " + resultSet.getInt(2) + " " + resultSet.getString(3) + " " + resultSet.getInt(4) +  "\n");
+                    }
+                     */
+                    connection = DatabaseHandler.createDbConn();
+                    ReservationDAO reservationDAO = new ReservationDAO(connection);
+                    Reservation reservation = reservationDAO.getReservationById(120);
                     Log.v("testReservation1", reservation.getDetails());
                     Statement statement = connection.createStatement();
                     StringBuffer stringBuffer = new StringBuffer();
@@ -105,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
         buttonfav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Log.v("buttonaddfav","buton de adaugat la fav");
                 try {
                     connection = DatabaseHandler.createDbConn();
                     Statement statement = connection.createStatement();

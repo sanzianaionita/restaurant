@@ -54,15 +54,10 @@ public class ReservationDAO {
         if(reservation.getDetails() != null){
             statement.setString(7, reservation.getDetails());
         }
-
-        Log.v("test","test19922222");
         try{
-            Log.v("test","test1992yuyuy");
             statement.executeQuery();
-            Log.v("test","test1992yuyuy2");
 
             connection.commit();
-            Log.v("test","test1992uuu");
         }catch (SQLException e){
             Log.v("test",e.getMessage());
             return false;
@@ -123,6 +118,22 @@ public class ReservationDAO {
             reservationList.add(reservation);
         }
         return reservationList;
+    }
+
+    public Reservation getReservationById(int id) throws SQLException {
+        StringBuffer stringBuffer = new StringBuffer();
+        String query = "SELECT * FROM rezervare WHERE id = ?";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1, id);
+        ResultSet resultSet = statement.executeQuery(query);
+        Reservation reservation = new Reservation(resultSet.getInt(2), resultSet.getString(3),
+                resultSet.getInt(4), resultSet.getInt(5), resultSet.getInt(6));
+        reservation.setId(resultSet.getInt(1));
+        if(resultSet.getString(7) != null){
+            reservation.setDetails(resultSet.getString(7));
+        }
+
+        return reservation;
     }
 
     public void editReservation(int id, String[] fieldsToUpdate, String values[]) throws SQLException {

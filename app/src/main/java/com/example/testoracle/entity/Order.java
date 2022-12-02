@@ -16,29 +16,27 @@ public class Order {
     private String address;
     private String description;
 
-    public Order(int userId, String date, String status, String address, String description) {
+    public Order(int userId, String date, String status, String address) {
         this.userId = userId;
         this.date = date;
         this.status = status;
         this.address = address;
+    }
+
+    public Order(int userId, String date, String status, String address, String description) {
+        this(userId, date, status, address);
         this.description = description;
     }
 
     public Order(int id, int userId, String date, String status, String address) {
+        this(userId, date, status, address);
         this.id = id;
-        this.userId = userId;
-        this.date = date;
-        this.status = status;
-        this.address = address;
     }
 
     public Order(int id, int userId, String date, String status, String address, String description) {
-        this.id = id;
-        this.userId = userId;
-        this.date = date;
-        this.status = status;
-        this.address = address;
+        this(userId, date, status, address);
         this.description = description;
+        this.id = id;
     }
 
     public Order(int id, int userId, Date date, String status, String address) {
@@ -53,14 +51,7 @@ public class Order {
     }
 
     public Order(int id, int userId, Date date, String status, String address, String description) {
-        this.id = id;
-        this.userId = userId;
-        this.status = status;
-        String pattern = "dd-MM-yyyy";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-
-        this.date = simpleDateFormat.format(date);
-        this.address = address;
+        this(id, userId, date, status, address);
         this.description = description;
     }
 
