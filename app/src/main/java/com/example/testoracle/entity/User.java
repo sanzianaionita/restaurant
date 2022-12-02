@@ -10,15 +10,13 @@ import java.util.Date;
 public class User {
 
     private int id;
-    private String username;
     private String firstname;
     private String lastname;
     private String email;
     private String password;
     private String date_of_birth;
 
-    public User(String username, String firstname, String lastname, String email, String password, String date_of_birth) {
-        this.username = username;
+    public User(String firstname, String lastname, String email, String password, String date_of_birth) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
@@ -26,8 +24,7 @@ public class User {
         this.date_of_birth = date_of_birth;
     }
 
-    public User(String username, String firstname, String lastname, String email, String password, Date date_of_birth) {
-        this.username = username;
+    public User(String firstname, String lastname, String email, String password, Date date_of_birth) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
@@ -45,15 +42,7 @@ public class User {
     public void setId(int id) {
         this.id = id;
     }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
+    
     public String getFirstname() {
         return firstname;
     }
@@ -99,8 +88,7 @@ public class User {
         if(obj instanceof User){
             User objuser = (User) obj;
 
-            if (objuser.getUsername().equals(this.getUsername()) &&
-                objuser.getFirstname().equals(this.getFirstname()) &&
+            if (objuser.getFirstname().equals(this.getFirstname()) &&
                     objuser.getLastname().equals(this.getLastname()) &&
                     objuser.getEmail().equals(this.getEmail()) &&
                     objuser.getPassword().equals(this.getPassword()) &&
@@ -115,7 +103,7 @@ public class User {
     @NonNull
     @Override
     public String toString() {
-        return "Username:" + username + "\n" + "FirstName:" + firstname + "\n"+
+        return "FirstName:" + firstname + "\n"+
                 "LastName:" + lastname + "\n" + "Email:" + email + "\n" + "Password:"+
                 password + "\n" + "DateOfBirth" + date_of_birth + "\n";
     }
