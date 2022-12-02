@@ -34,18 +34,18 @@ public class UserDAO {
 
     //create a user in the database given an object of type user as a parameter
     public boolean createUser(User user) throws SQLException {
-        String statementQuery = "INSERT INTO utilizator VALUES (?,?,?,?,?,?,TO_DATE(?,'DD-MM-YYYY'))";
+        String statementQuery = "INSERT INTO utilizator VALUES (?,?,?,?,?,TO_DATE(?,'DD-MM-YYYY'))";
 
         PreparedStatement statement = connection.prepareStatement(statementQuery);
 
         int id = getLastID();
         statement.setInt(1, id);
-        statement.setString(2, user.getUsername());
-        statement.setString(3, user.getFirstname());
-        statement.setString(4, user.getLastname());
-        statement.setString(5, user.getEmail());
-        statement.setString(6, user.getPassword());
-        statement.setString(7, user.getDate_of_birth());
+        
+        statement.setString(2, user.getFirstname());
+        statement.setString(3, user.getLastname());
+        statement.setString(4, user.getEmail());
+        statement.setString(5, user.getPassword());
+        statement.setString(6, user.getDate_of_birth());
 
         try{
             statement.executeUpdate();
@@ -65,7 +65,7 @@ public class UserDAO {
         while (resultSet.next()){
             User user = new User(resultSet.getString(2), resultSet.getString(3),
                     resultSet.getString(4), resultSet.getString(5),
-                    resultSet.getString(6), resultSet.getDate(7));
+                    resultSet.getString(6);
             user.setId(resultSet.getInt(1));
             userList.add(user);
         }
@@ -84,7 +84,7 @@ public class UserDAO {
         while (resultSet.next()){
             user = new User(resultSet.getString(2), resultSet.getString(3),
                     resultSet.getString(4), resultSet.getString(5),
-                    resultSet.getString(6), resultSet.getDate(7));
+                    resultSet.getString(6));
             user.setId(resultSet.getInt(1));
             break;
         }
@@ -104,7 +104,7 @@ public class UserDAO {
         while (resultSet.next()){
             User user = new User(resultSet.getString(2), resultSet.getString(3),
                     resultSet.getString(4), resultSet.getString(5),
-                    resultSet.getString(6), resultSet.getDate(7));
+                    resultSet.getString(6));
             user.setId(resultSet.getInt(1));
             users.add(user);
             break;
@@ -124,28 +124,9 @@ public class UserDAO {
         resultSet.next();
         user = new User(resultSet.getString(2), resultSet.getString(3),
                     resultSet.getString(4), resultSet.getString(5),
-                    resultSet.getString(6), resultSet.getDate(7));
+                    resultSet.getString(6));
         user.setId(resultSet.getInt(1));
 
-
-        return user;
-    }
-
-    public User getUserByUsername(String username) throws SQLException {
-        User user = null;
-
-        String query = "SELECT * FROM utilizator WHERE email = ?";
-        PreparedStatement statement = connection.prepareStatement(query);
-        statement.setString(1, username);
-
-        ResultSet resultSet = statement.executeQuery();
-
-        resultSet.next();
-
-        user = new User(resultSet.getString(2), resultSet.getString(3),
-                    resultSet.getString(4), resultSet.getString(5),
-                    resultSet.getString(6), resultSet.getDate(7));
-        user.setId(resultSet.getInt(1));
 
         return user;
     }
@@ -185,12 +166,4 @@ public class UserDAO {
         connection.commit();
     }
 
-    public void deleteUserByUsername(String username) throws SQLException {
-        String query = "DELETE FROM utilizator WHERE username= ?";
-        PreparedStatement statement = connection.prepareStatement(query);
-        statement.setString(1, username);
-
-        statement.executeUpdate();
-        connection.commit();
-    }
 }
