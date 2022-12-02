@@ -1,4 +1,22 @@
 <resources>
-    <string name="app_name">Restaurant</string>
-    <string name="productsText">Produse</string>
+    <string name="app_name">Restaurant18</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+
+    <string name="menu_restaurant_menu">Menu</string>
+    <string name="menu_new_order">Place an order</string>
+    <string name="menu_favorite_product">Favorite products</string>
+    <string name="menu_order_history">Last orders</string>
+    <string name="menu_reservations">Reservation</string>
+    <string name="menu_profile">Profile settings</string>
+    <string name="menu_logout">Logout</string>
+
 </resources>
