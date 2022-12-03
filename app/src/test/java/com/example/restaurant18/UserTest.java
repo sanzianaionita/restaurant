@@ -42,15 +42,15 @@ public class UserTest {
 
         createConnection();
 
-        User user = new User(100,"Raisa", "Tofanel",
-                "test@mail.com", "test",
+        User user = new User(100,"Ana", "Tofanel",
+                "ceva@mail.com", "test",
                 "mrs", "24-12-2000");
 
         UserDAO userDAO = new UserDAO(connection);
 
         userDAO.createUser(user);
 
-        User selectedUser = userDAO.getUserByEmail("test@mail.com");
+        User selectedUser = userDAO.getUserByEmail("ceva@mail.com");
 
         assertEquals(user, selectedUser);
     }
