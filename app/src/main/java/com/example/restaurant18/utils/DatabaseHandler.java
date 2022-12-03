@@ -9,10 +9,9 @@ import java.sql.SQLException;
 public class DatabaseHandler {
 
     private static final String DRIVER = "oracle.jdbc.driver.OracleDriver";
-    private static final String URL = "jdbc:oracle:thin:@192.168.0.178:1521:XE";
-            //"jdbc:oracle:thin:@192.168.1.129:1521:XE";
-    private static final String USERNAME = "CTXSYS";
-    private static final String PASSWORD = "CTXSYS";
+    private  static final String URL = "jdbc:oracle:thin:@192.168.100.34:1521:XE";
+    private static final String USERNAME = "raisa";
+    private static final String PASSWORD = "Sasakisan";
 
     private static Connection connection;
 
