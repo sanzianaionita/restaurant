@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.example.restaurant18.DAO.UserDAO;
+import com.example.restaurant18.entity.User;
 
 import org.junit.Test;
 
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class UserTest {
     private static final String DRIVER = "oracle.jdbc.driver.OracleDriver";
-    private  static final String URL = "jdbc:oracle:thin:@192.168.100.17:1521:XE";
+    private  static final String URL = "jdbc:oracle:thin:@192.168.100.34:1521:XE";
     private static final String USERNAME = "raisa";
     private static final String PASSWORD = "Sasakisan";
 
@@ -39,31 +40,28 @@ public class UserTest {
     @Test
     public void createUserSuccessfulTest() throws SQLException {
 
-        User user = new User("Raisa", "Tofanel",
-                "raisatest2@gmail.com", "testRaisaPassword", "24-12-2000");
+        createConnection();
+
+        User user = new User(100,"Raisa", "Tofanel",
+                "test@mail.com", "test",
+                "mrs", "24-12-2000");
 
         UserDAO userDAO = new UserDAO(connection);
 
         userDAO.createUser(user);
 
-        Statement statement = connection.createStatement();
+        User selectedUser = userDAO.getUserByEmail("test@mail.com");
 
-        ResultSet rs = statement.executeQuery("SELECT * FROM utilizator WHERE username = '" + user.getUsername() + "'");
-
-        rs.next();
-
-        User selectedUser = new User(rs.getString(2),rs.getString(3), rs.getString(4),
-                rs.getString(5),rs.getString(6), rs.getDate(7));
-
-        assertTrue(user.equals(selectedUser));
+        assertEquals(user, selectedUser);
     }
 
     @Test
     public void createUserBrokeUniqueConstraintTest() throws SQLException {
         createConnection();
 
-        User user = new User("raisa1234", "Raisa", "Tofanel",
-                "raisatest@gmail.com", "testRaisaPassword", "24-12-2000");
+        User user = new User(1,"Raisa", "Tofanel",
+                "rai@mail.com", "test",
+                "mrs", "24-12-2000");
 
         UserDAO userDAO = new UserDAO(connection);
 
@@ -76,10 +74,11 @@ public class UserTest {
     public void GetUserByIDSuccessfulTest() throws SQLException {
         createConnection();
         UserDAO userDAO = new UserDAO(connection);
-        User user = userDAO.getUserByID(4);
+        User user = userDAO.getUserByID(0);
 
-        User userCorrect = new User("raisa1234", "Raisa", "Tofanel",
-                "raisatest@gmail.com", "testRaisaPassword", "24-12-2000");
+        User userCorrect = new User(0,"admin", "admin",
+                "admin@mail.com", "admin",
+                "mrs", "24-12-2000");
 
         assertEquals(user, userCorrect);
         connection.close();

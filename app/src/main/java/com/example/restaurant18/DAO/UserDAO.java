@@ -32,7 +32,8 @@ public class UserDAO {
 
     //create a user in the database given an object of type user as a parameter
     public boolean createUser(User user) throws SQLException {
-        String statementQuery = "INSERT INTO utilizator VALUES (?,?,?,?,?,TO_DATE(?,'DD-MM-YYYY'))";
+
+        String statementQuery = "INSERT INTO utilizator VALUES (?,?,?,?,?,?,TO_DATE(?,'DD-MM-YYYY'))";
 
         PreparedStatement statement = connection.prepareStatement(statementQuery);
 
@@ -43,8 +44,8 @@ public class UserDAO {
         statement.setString(3, user.getLastname());
         statement.setString(4, user.getEmail());
         statement.setString(5, user.getPassword());
-        statement.setString(5, user.getAppellative());
-        statement.setString(6, user.getBirthDate());
+        statement.setString(6, user.getAppellative());
+        statement.setString(7, user.getBirthDate());
 
         try{
             statement.executeUpdate();
@@ -64,7 +65,7 @@ public class UserDAO {
         while (resultSet.next()){
             User user = new User(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
                     resultSet.getString(4), resultSet.getString(5),
-                    resultSet.getString(6), resultSet.getString(7));
+                    resultSet.getString(6), resultSet.getDate(7));
             userList.add(user);
         }
         return userList;
@@ -82,7 +83,7 @@ public class UserDAO {
         while (resultSet.next()){
             user = new User(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
                     resultSet.getString(4), resultSet.getString(5),
-                    resultSet.getString(6), resultSet.getString(7));
+                    resultSet.getString(6), resultSet.getDate(7));
             break;
         }
         return user;
@@ -101,7 +102,7 @@ public class UserDAO {
         while (resultSet.next()){
             User user = new User(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
                     resultSet.getString(4), resultSet.getString(5),
-                    resultSet.getString(6), resultSet.getString(7));
+                    resultSet.getString(6), resultSet.getDate(7));
             users.add(user);
             break;
         }
@@ -120,7 +121,7 @@ public class UserDAO {
         resultSet.next();
         user = new User(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
                 resultSet.getString(4), resultSet.getString(5),
-                resultSet.getString(6), resultSet.getString(7));
+                resultSet.getString(6), resultSet.getDate(7));
 
         return user;
     }
@@ -173,7 +174,7 @@ public class UserDAO {
 
         user = new User(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
                 resultSet.getString(4), resultSet.getString(5),
-                resultSet.getString(6), resultSet.getString(7));
+                resultSet.getString(6), resultSet.getDate(7));
 
         return user;
     }
