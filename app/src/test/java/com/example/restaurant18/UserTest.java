@@ -18,10 +18,10 @@ import java.sql.Statement;
 import java.util.List;
 
 public class UserTest {
-    private static final String DRIVER = "oracle.jdbc.OracleDriver";
-    private  static final String URL = "jdbc:oracle:thin:@192.168.1.134:1521:xe";
-    private static final String USERNAME = "bogdan";
-    private static final String PASSWORD = "12345";
+    private static final String DRIVER = "oracle.jdbc.driver.OracleDriver";
+    private  static final String URL = "jdbc:oracle:thin:@192.168.100.34:1521:xe";
+    private static final String USERNAME = "raisa";
+    private static final String PASSWORD = "Sasakisan";
 
     private Connection connection;
 
@@ -42,15 +42,15 @@ public class UserTest {
 
         createConnection();
 
-        User user = new User(100,"Raisa", "Tofanel",
-                "test@mail.com", "test",
+        User user = new User(100,"Ana", "Tofanel",
+                "ceva@mail.com", "test",
                 "mrs", "24-12-2000");
 
         UserDAO userDAO = new UserDAO(connection);
 
         userDAO.createUser(user);
 
-        User selectedUser = userDAO.getUserByEmail("test@mail.com");
+        User selectedUser = userDAO.getUserByEmail("ceva@mail.com");
 
         assertEquals(user, selectedUser);
     }

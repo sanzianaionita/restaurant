@@ -36,10 +36,10 @@ public class SignupFragment extends Fragment {
     private EditText editTextEmailSignup, editTextPasswordSignup, editTextPasswordConfirmSignup, editTextFirstName, editTextLastName, editTextBirthDate;
     private Button buttonSignUp;
 
-    private static final String DRIVER = "oracle.jdbc.OracleDriver";
-    private static final String URL = "jdbc:oracle:thin:@192.168.1.134:1521:xe";
-    private static final String USERNAME = "bogdan";
-    private static final String PASSWORD = "12345";
+    private static final String DRIVER = "oracle.jdbc.driver.OracleDriver";
+    private static final String URL = "jdbc:oracle:thin:@192.168.100.34:1521:xe";
+    private static final String USERNAME = "raisa";
+    private static final String PASSWORD = "Sasakisan";
     private Connection connection;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,8 +66,6 @@ public class SignupFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                Signup("q@q.ro","1","1","1","Mr","12-12-2022");
-                /*
                 if(!emptyFields())
                 {
                     if(validateEmail())
@@ -115,7 +113,7 @@ public class SignupFragment extends Fragment {
                         Toast.makeText(getContext(), "Please select the appropriate appellative", Toast.LENGTH_SHORT).show();
                 }
 
-                 */
+
             }
         });
 
@@ -134,7 +132,7 @@ public class SignupFragment extends Fragment {
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 
             UserDAO userDAO = new UserDAO(connection);
-            System.out.println("IIDDD DISPONIBIL:");
+
             auxUser = userDAO.getUserByEmail(email);
 
             if(auxUser != null)
