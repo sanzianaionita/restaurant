@@ -169,8 +169,8 @@ public class UserDAO {
         statement.setString(2, password);
 
         ResultSet resultSet = statement.executeQuery();
-
         resultSet.next();
+
         user = new User(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
                 resultSet.getString(4), resultSet.getString(5),
                 resultSet.getString(6), resultSet.getString(7));

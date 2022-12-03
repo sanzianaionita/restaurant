@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.restaurant18.DAO.UserDAO;
 import com.example.restaurant18.LoginSignupActivity;
 import com.example.restaurant18.MainActivity;
 import com.example.restaurant18.R;
@@ -30,6 +31,11 @@ public class LoginFragment extends Fragment {
     private EditText editTextEmail, editTextPassword;
     private Button buttonLogin, buttonLoginAsGuest;
     private float v=0;
+
+    private static final String DRIVER = "oracle.jdbc.OracleDriver";
+    private static final String URL = "jdbc:oracle:thin:@192.168.1.134:1521:xe";
+    private static final String USERNAME = "bogdan";
+    private static final String PASSWORD = "12345";
     private Connection connection;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -68,7 +74,7 @@ public class LoginFragment extends Fragment {
                 String email = editTextEmail.getText().toString().trim();
                 String password = editTextPassword.getText().toString().trim();
                 Login(email, password, user);
-                /*if (!email.isEmpty() && !password.isEmpty())
+                if (!email.isEmpty() && !password.isEmpty())
                     Login(email, password, user);
                 else
                 {
@@ -76,7 +82,7 @@ public class LoginFragment extends Fragment {
                         editTextEmail.setError("Please insert your email address");
                     if (password.isEmpty())
                         editTextPassword.setError("Please insert your password");
-                }*/
+                }
             }
         });
 
@@ -96,43 +102,33 @@ public class LoginFragment extends Fragment {
     {
         try
         {
-
             StrictMode.ThreadPolicy threadPolicy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(threadPolicy);
-            Class.forName("oracle.jdbc.OracleDriver");
-            connection = DriverManager.getConnection("jdbc:oracle:thin:@192.168.1.134:1521:xe",
-                    "bogdan", "12345");
 
-            String query = "select * from utilizator where email='bogdan@mail.com' and password='123'";
-            PreparedStatement statement = connection.prepareStatement(query);
-            //statement.setString(1, email);
-            //statement.setString(2, password);
+            Class.forName(DRIVER);
+            connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 
-            ResultSet resultSet = statement.executeQuery();
-            System.out.println("daaaaaaa");
-            /*if(email.equals(user.getEmail()) && password.equals(user.getParola()))
-            {
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                intent.putExtra("nume", user.getNume());
-                intent.putExtra("email", user.getEmail());
-                intent.putExtra("prenume", user.getPrenume());
-                intent.putExtra("apelativ", user.getSex());
-                intent.putExtra("guest", false);
-                intent.putExtra("user",user);
-                startActivity(intent);
-                getActivity().finish();
-            }
-            else
+            UserDAO userDAO = new UserDAO(connection);
+            user = userDAO.getUserByCredentials(email,password);
+
+            if(user == null)
             {
                 Toast.makeText(getContext(), "Invalid credentials", Toast.LENGTH_SHORT).show();
                 editTextEmail.setText(null);
                 editTextPassword.setText(null);
-            }*/
+            }
+            else
+            {
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                intent.putExtra("user",user);
+                startActivity(intent);
+                getActivity().finish();
+            }
         }
         catch (Exception e)
         {
-            System.out.println("ERRRRRRRROARE"+e.getMessage());
-            Toast.makeText(getContext(), "Couldn't logged you in", Toast.LENGTH_SHORT).show();
+            System.out.println(e.getMessage());
+            Toast.makeText(getContext(), "Invalid credentials or user doesn't exits in database", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -152,7 +148,6 @@ public class LoginFragment extends Fragment {
         }
         catch (Exception e)
         {
-            System.out.println("ERRRRRRRROARE"+e.getMessage());
             Toast.makeText(getContext(), "Couldn't logged you in as a guest", Toast.LENGTH_SHORT).show();
         }
     }

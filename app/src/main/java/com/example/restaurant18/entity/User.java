@@ -3,10 +3,11 @@ package com.example.restaurant18.entity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class User {
+public class User implements Serializable {
 
     private int id;
     private String firstname;

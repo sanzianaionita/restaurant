@@ -51,10 +51,6 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         user = (User) getIntent().getSerializableExtra("user");
-        String email_received = intent.getStringExtra("email").trim();
-        String nume_received = intent.getStringExtra("nume").trim();
-        String prenume_received = intent.getStringExtra("prenume").trim();
-        String apelativ_received = intent.getStringExtra("apelativ").trim();
         Boolean guest_received = intent.getBooleanExtra("guest", false);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -84,23 +80,21 @@ public class MainActivity extends AppCompatActivity {
         textViewEmail = viewHeader.findViewById(R.id.textViewEmail);
 
 
-        if (apelativ_received.equals("Mr"))
+        if (user.getAppellative().equals("Mr"))
             imageViewUser.setImageResource(R.mipmap.png_man);
         else
             imageViewUser.setImageResource(R.mipmap.png_woman);
 
-        textViewUserName.setText("Hello, "+prenume_received+" "+nume_received);
-        textViewEmail.setText(email_received);
+        textViewUserName.setText("Hello, "+user.getFirstname()+" "+user.getLastname());
+        textViewEmail.setText(user.getEmail());
 
         if(guest_received)
         {
-            //navigationView.getMenu().findItem(R.id.nav_favorite_product).setEnabled(false);
+            navigationView.getMenu().findItem(R.id.nav_favorite_product).setEnabled(false);
             navigationView.getMenu().findItem(R.id.nav_order_history).setEnabled(false);
             navigationView.getMenu().findItem(R.id.nav_reservation).setEnabled(false);
             navigationView.getMenu().findItem(R.id.nav_profile).setEnabled(false);
         }
-
-
 
 
         navigationView.getMenu().findItem(R.id.nav_logout).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener()
