@@ -18,10 +18,10 @@ import java.sql.Statement;
 import java.util.List;
 
 public class UserTest {
-    private static final String DRIVER = "oracle.jdbc.driver.OracleDriver";
-    private  static final String URL = "jdbc:oracle:thin:@192.168.100.34:1521:XE";
-    private static final String USERNAME = "raisa";
-    private static final String PASSWORD = "Sasakisan";
+    private static final String DRIVER = "oracle.jdbc.OracleDriver";
+    private  static final String URL = "jdbc:oracle:thin:@192.168.1.134:1521:xe";
+    private static final String USERNAME = "bogdan";
+    private static final String PASSWORD = "12345";
 
     private Connection connection;
 

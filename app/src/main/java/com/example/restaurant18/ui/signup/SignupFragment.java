@@ -134,7 +134,7 @@ public class SignupFragment extends Fragment {
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 
             UserDAO userDAO = new UserDAO(connection);
-            System.out.println("IIDDD DISPONIBIL:"+String.valueOf(userDAO.getLastID()));
+            System.out.println("IIDDD DISPONIBIL:");
             auxUser = userDAO.getUserByEmail(email);
 
             if(auxUser != null)
