@@ -28,7 +28,7 @@ import java.util.List;
 public class MenuFragment extends Fragment {
 
     private FragmentMenuBinding binding;
-    Connection connection = DatabaseHandler.createDbConn();
+    Connection connection ;
 
     public MenuFragment() throws SQLException, ClassNotFoundException {
     }
@@ -51,7 +51,7 @@ public class MenuFragment extends Fragment {
         RecycleViewAdapterCategory recycleViewAdapterCategory = null;
         try {
             recycleViewAdapterCategory = new RecycleViewAdapterCategory(buildCategoryList());
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         recyclerView.setAdapter(recycleViewAdapterCategory);
@@ -96,7 +96,7 @@ public class MenuFragment extends Fragment {
         binding = null;
     }
 
-    public ArrayList<Category> buildCategoryList() throws SQLException {
+    public ArrayList<Category> buildCategoryList() throws SQLException, ClassNotFoundException {
 
         ArrayList<Category> categoryArrayList = new ArrayList<>();
         for (ProductType productType :
@@ -107,8 +107,8 @@ public class MenuFragment extends Fragment {
         return categoryArrayList;
     }
 
-    public ArrayList<Product> buildProductList(ProductType productType) throws SQLException {
-
+    public ArrayList<Product> buildProductList(ProductType productType) throws SQLException, ClassNotFoundException {
+        connection = DatabaseHandler.createDbConn();
         ArrayList<Product> productArrayList = new ArrayList<>();
         ProductDAO productDAO = new ProductDAO(connection);
         productArrayList =  productDAO.getProductsByProductType(productType.getCode());
