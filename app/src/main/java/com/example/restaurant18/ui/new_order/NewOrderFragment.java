@@ -20,14 +20,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.example.restaurant18.DAO.ProductDAO;
 import com.example.restaurant18.MainActivity;
 import com.example.restaurant18.OrderComponent;
-import com.example.restaurant18.Product;
 import com.example.restaurant18.R;
 import com.example.restaurant18.RecycleViewAdapterAllProducts;
 import com.example.restaurant18.databinding.FragmentNewOrderBinding;
 import com.google.android.material.snackbar.Snackbar;
+import com.example.restaurant18.entity.Product;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class NewOrderFragment extends Fragment {
@@ -48,13 +50,11 @@ public class NewOrderFragment extends Fragment {
 
         dialog = new Dialog(getContext());
 
-        productsList.add(new Product("Hamburger1", "desc", "10.0"));
-        productsList.add(new Product("Hamburger2", "desc", "10.0"));
-        productsList.add(new Product("Hamburger3", "desc", "10.0"));
-        productsList.add(new Product("Hamburger4", "desc", "10.0"));
-        productsList.add(new Product("Hamburger5", "desc", "10.0"));
-        productsList.add(new Product("Hamburger6", "desc", "10.0"));
-        productsList.add(new Product("Hamburger7", "desc", "10.0"));
+        try {
+            productsList = ProductDAO.getAllProducts();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         total = 0.0;
         Button button = root.findViewById(R.id.b_orderContent);
@@ -79,7 +79,7 @@ public class NewOrderFragment extends Fragment {
                 currentQuantity = currentQuantity+1;
                 textViewQuantity.setText(String.valueOf(currentQuantity));
 
-                total = total+Double.parseDouble(currentProduct.getProductPrice());
+                total = total+currentProduct.getProductPrice();
                 if(checkIfProductExistsInList(orderProductsList,currentProduct))
                 {
                     updateProductQuantityInList(orderProductsList,currentProduct,currentQuantity);
@@ -108,7 +108,7 @@ public class NewOrderFragment extends Fragment {
                 currentQuantity = currentQuantity-1;
                 textViewQuantity.setText(String.valueOf(currentQuantity));
 
-                total = total-Double.parseDouble(currentProduct.getProductPrice());
+                total = total-currentProduct.getProductPrice();
                 total = Double.parseDouble(String.format("%.2f", total));
 
                 if(currentQuantity==0)

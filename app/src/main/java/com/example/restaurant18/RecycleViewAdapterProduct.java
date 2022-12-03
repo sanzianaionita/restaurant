@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.example.restaurant18.entity.Product;
 
 import java.util.ArrayList;
 
@@ -46,7 +47,7 @@ public class RecycleViewAdapterProduct extends RecyclerView.Adapter<RecycleViewA
         Product product = productArrayList.get(position);
         viewHolder.textViewProductName.setText(product.getProductName());
         viewHolder.textViewProductDescription.setText(product.getProductDescription());
-        viewHolder.textViewProductPrice.setText(product.getProductPrice());
+        viewHolder.textViewProductPrice.setText(product.getProductPrice().toString());
     }
 
     @Override

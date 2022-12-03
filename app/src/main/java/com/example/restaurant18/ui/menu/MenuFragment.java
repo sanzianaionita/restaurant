@@ -12,19 +12,30 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.restaurant18.Category;
-import com.example.restaurant18.Product;
+import com.example.restaurant18.DAO.ProductDAO;
+import com.example.restaurant18.entity.Product;
 import com.example.restaurant18.R;
 import com.example.restaurant18.RecycleViewAdapterCategory;
 import com.example.restaurant18.databinding.FragmentMenuBinding;
+import com.example.restaurant18.enums.ProductType;
+import com.example.restaurant18.utils.DatabaseHandler;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MenuFragment extends Fragment {
 
     private FragmentMenuBinding binding;
+    Connection connection = DatabaseHandler.createDbConn();
+
+    public MenuFragment() throws SQLException, ClassNotFoundException {
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
         MenuViewModel homeViewModel =
                 new ViewModelProvider(this).get(MenuViewModel.class);
 
@@ -37,7 +48,12 @@ public class MenuFragment extends Fragment {
 
         RecyclerView recyclerView = root.findViewById(R.id.rv_categoryList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        RecycleViewAdapterCategory recycleViewAdapterCategory = new RecycleViewAdapterCategory(buildCategoryList());
+        RecycleViewAdapterCategory recycleViewAdapterCategory = null;
+        try {
+            recycleViewAdapterCategory = new RecycleViewAdapterCategory(buildCategoryList());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         recyclerView.setAdapter(recycleViewAdapterCategory);
         recyclerView.setLayoutManager(layoutManager);
 
@@ -80,24 +96,23 @@ public class MenuFragment extends Fragment {
         binding = null;
     }
 
-    public ArrayList<Category> buildCategoryList() {
+    public ArrayList<Category> buildCategoryList() throws SQLException {
 
         ArrayList<Category> categoryArrayList = new ArrayList<>();
-        for (int i=0; i<3; i++) {
-            Category category = new Category("Burger Categoria "+i, buildProductList());
+        for (ProductType productType :
+                ProductType.values()) {
+            Category category = new Category(productType.getCode(), buildProductList(productType));
             categoryArrayList.add(category);
         }
         return categoryArrayList;
     }
 
-    public ArrayList<Product> buildProductList() {
+    public ArrayList<Product> buildProductList(ProductType productType) throws SQLException {
 
         ArrayList<Product> productArrayList = new ArrayList<>();
-        String desc = "Antricot de vită, ceapă roșie, sos tzatziki, castravete proaspăt, cașcaval Cheddar";
-        for (int i=0; i<8; i++) {
-            Product product = new Product("Hamburger", desc, "55.99 Lei");
-            productArrayList.add(product);
-        }
+        ProductDAO productDAO = new ProductDAO(connection);
+        productArrayList =  productDAO.getProductsByProductType(productType.getCode());
+
         return productArrayList;
     }
 

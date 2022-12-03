@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.restaurant18.MainActivity;
-import com.example.restaurant18.Product;
+import com.example.restaurant18.entity.Product;
 import com.example.restaurant18.R;
 import com.example.restaurant18.RecycleViewAdapterFavoriteProducts;
 import com.example.restaurant18.databinding.FragmentFavoriteProductsBinding;

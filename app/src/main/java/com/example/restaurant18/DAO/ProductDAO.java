@@ -14,10 +14,36 @@ import java.util.List;
 
 public class ProductDAO {
 
-    private Connection connection;
+    private static Connection connection;
 
     public ProductDAO(Connection connection) {
         this.connection = connection;
+    }
+
+    public void createProduct(Product product){
+        String insertQuery = "insert into product (product_name, product_description, product_price, product_quantity, product_type) " +
+                "values (?,?,?,?,?)";
+        String findProductQuery = "select product_name from product where product_name=?";
+        try {
+            PreparedStatement findProductStatement = connection.prepareStatement(findProductQuery);
+            findProductStatement.setString(1, product.getProductName());
+            ResultSet resultSet = findProductStatement.executeQuery();
+
+            if (!resultSet.next()) {
+                PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
+
+                insertStatement.setString(1, product.getProductName());
+                insertStatement.setString(2, product.getProductDescription());
+                insertStatement.setDouble(3, product.getProductPrice());
+                insertStatement.setInt(4, product.getProductQuantity());
+                insertStatement.setString(5, product.getProductType());
+
+                insertStatement.executeUpdate();
+                connection.commit();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void createProducts() {
@@ -53,8 +79,27 @@ public class ProductDAO {
         });
     }
 
-    public List<Product> getProductsByProductType(String productType) throws SQLException {
-        List<Product> productsByType = new ArrayList<>();
+    public static ArrayList<Product> getAllProducts() throws SQLException {
+        ArrayList<Product> productsByType = new ArrayList<>();
+        String query = "SELECT * FROM product";
+        PreparedStatement statement = connection.prepareStatement(query);
+
+        ResultSet resultSet = statement.executeQuery();
+
+        while (resultSet.next()) {
+            Product product = new Product(resultSet.getString(2),
+                    resultSet.getString(3),
+                    resultSet.getDouble(4),
+                    resultSet.getInt(5),
+                    resultSet.getString(6));
+
+            productsByType.add(product);
+        }
+        return productsByType;
+    }
+
+    public static ArrayList<Product> getProductsByProductType(String productType) throws SQLException {
+        ArrayList<Product> productsByType = new ArrayList<>();
         String query = "SELECT * FROM product WHERE product_type = ?";
         PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, productType);
@@ -134,7 +179,15 @@ public class ProductDAO {
 
         }
     }
-
+/*
+    public void main(String[] args) {
+        List<Product> products = generateInitialListOfProducts();
+        for (Product product:
+             products) {
+            createProduct(product);
+        }
+    }
+*/
     private List<Product> generateInitialListOfProducts() {
 
         Product product1 = new Product("Pizza Margherita", "sos de rosii si mozarella", 38.00, 25, ProductType.PIZZA.getCode());

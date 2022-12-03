@@ -33,9 +33,9 @@ public class LoginFragment extends Fragment {
     private float v=0;
 
     private static final String DRIVER = "oracle.jdbc.OracleDriver";
-    private static final String URL = "jdbc:oracle:thin:@192.168.1.134:1521:xe";
-    private static final String USERNAME = "bogdan";
-    private static final String PASSWORD = "12345";
+    private static final String URL = "jdbc:oracle:thin:@192.168.0.178:1521:xe";
+    private static final String USERNAME = "CTXSYS";
+    private static final String PASSWORD = "CTXSYS";
     private Connection connection;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

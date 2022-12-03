@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.example.restaurant18.entity.Product;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -70,7 +71,7 @@ public class RecycleViewAdapterFavoriteProducts extends RecyclerView.Adapter<Rec
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, @SuppressLint("RecyclerView") int position) {
         Product product = favoriteProductsArrayList.get(position);
         viewHolder.textViewProductName.setText(product.getProductName());
-        viewHolder.textViewProductPrice.setText(product.getProductPrice());
+        viewHolder.textViewProductPrice.setText(product.getProductPrice().toString());
         viewHolder.imageViewProductImage.setImageResource(R.mipmap.png_man);
     }
 

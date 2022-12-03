@@ -12,6 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.restaurant18.entity.Product;
+
 import java.util.ArrayList;
 
 public class RecycleViewAdapterAllProducts extends RecyclerView.Adapter<RecycleViewAdapterAllProducts.ViewHolder> {
@@ -82,7 +84,7 @@ public class RecycleViewAdapterAllProducts extends RecyclerView.Adapter<RecycleV
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, @SuppressLint("RecyclerView") int position) {
         Product product = productArrayList.get(position);
         viewHolder.textViewProductName.setText(product.getProductName());
-        viewHolder.textViewProductPrice.setText(product.getProductPrice());
+        viewHolder.textViewProductPrice.setText(product.getProductPrice().toString());
         viewHolder.textViewProductQuantity.setText("0");
         viewHolder.textViewProductQuantity.setVisibility(View.INVISIBLE);
         viewHolder.imageViewRemoveButton.setVisibility(View.INVISIBLE);

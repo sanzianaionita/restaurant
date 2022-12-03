@@ -23,6 +23,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.restaurant18.databinding.ActivityMainBinding;
+import com.example.restaurant18.entity.Product;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -79,14 +80,21 @@ public class MainActivity extends AppCompatActivity {
         textViewUserName = viewHeader.findViewById(R.id.textViewUserName);
         textViewEmail = viewHeader.findViewById(R.id.textViewEmail);
 
+        if(!guest_received){
+            if (user.getAppellative().equals("Mr"))
+                imageViewUser.setImageResource(R.mipmap.png_man);
+            else
+                imageViewUser.setImageResource(R.mipmap.png_woman);
+            textViewUserName.setText("Hello, "+user.getFirstname()+" "+user.getLastname());
+            textViewEmail.setText(user.getEmail());
+        } else{
+            imageViewUser.setImageResource(R.mipmap.ic_launcher_round);
+            textViewUserName.setText("Hello, guest!");
+            textViewEmail.setText("guest");
+        }
 
-        if (user.getAppellative().equals("Mr"))
-            imageViewUser.setImageResource(R.mipmap.png_man);
-        else
-            imageViewUser.setImageResource(R.mipmap.png_woman);
 
-        textViewUserName.setText("Hello, "+user.getFirstname()+" "+user.getLastname());
-        textViewEmail.setText(user.getEmail());
+
 
         if(guest_received)
         {

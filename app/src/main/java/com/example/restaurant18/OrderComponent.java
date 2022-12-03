@@ -1,4 +1,5 @@
 package com.example.restaurant18;
+import com.example.restaurant18.entity.Product;
 
 public class OrderComponent {
 
