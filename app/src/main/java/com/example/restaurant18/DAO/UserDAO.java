@@ -12,13 +12,19 @@ import java.util.List;
 
 //unde pun query urile
 public class UserDAO {
+
     private Connection connection;
+
+
+    public Connection getConnection() {
+        return connection;
+    }
 
     public UserDAO(Connection connection) {
         this.connection = connection;
     }
 
-    private int getLastID() throws SQLException {
+    public int getLastID() throws SQLException {
         int id;
 
         Statement statement = connection.createStatement();
@@ -32,22 +38,24 @@ public class UserDAO {
 
     //create a user in the database given an object of type user as a parameter
     public boolean createUser(User user) throws SQLException {
-        String statementQuery = "INSERT INTO utilizator VALUES (?,?,?,?,?,TO_DATE(?,'DD-MM-YYYY'))";
+        String statementQuery = "INSERT INTO utilizator VALUES (?,?,?,?,?,?,TO_DATE(?,'DD-MM-YYYY'))";
 
         PreparedStatement statement = connection.prepareStatement(statementQuery);
 
         int id = getLastID();
+        System.out.println("IIIIIIIDDDDDDD: "+id);
         statement.setInt(1, id);
         
         statement.setString(2, user.getFirstname());
         statement.setString(3, user.getLastname());
         statement.setString(4, user.getEmail());
         statement.setString(5, user.getPassword());
-        statement.setString(5, user.getAppellative());
-        statement.setString(6, user.getBirthDate());
+        statement.setString(6, user.getAppellative());
+        statement.setString(7, user.getBirthDate());
+        System.out.println("STATEMENT CREATTTTT");
 
         try{
-            statement.executeUpdate();
+            statement.executeQuery();
             connection.commit();
         }catch (SQLException e){
             return false;
@@ -117,10 +125,11 @@ public class UserDAO {
 
         ResultSet resultSet = statement.executeQuery();
 
-        resultSet.next();
-        user = new User(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
-                resultSet.getString(4), resultSet.getString(5),
-                resultSet.getString(6), resultSet.getString(7));
+        if(resultSet.next()) {
+            user = new User(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
+                    resultSet.getString(4), resultSet.getString(5),
+                    resultSet.getString(6), resultSet.getString(7));
+        }
 
         return user;
     }

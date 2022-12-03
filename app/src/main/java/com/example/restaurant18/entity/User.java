@@ -27,6 +27,15 @@ public class User implements Serializable {
         this.birthDate = birthDate;
     }
 
+    public User(String firstname, String lastname, String email, String password, String appellative,String birthDate) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.password = password;
+        this.appellative = appellative;
+        this.birthDate = birthDate;
+    }
+
     public User(int id, String firstname, String lastname, String email, String password, String appellative, Date birthDate) {
         this.id = id;
         this.firstname = firstname;
