@@ -4,6 +4,7 @@ import static java.util.UUID.randomUUID;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +18,19 @@ import androidx.fragment.app.Fragment;
 import com.example.restaurant18.LoginSignupActivity;
 import com.example.restaurant18.MainActivity;
 import com.example.restaurant18.R;
-import com.example.restaurant18.User;
+import com.example.restaurant18.entity.User;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class LoginFragment extends Fragment {
 
     private EditText editTextEmail, editTextPassword;
     private Button buttonLogin, buttonLoginAsGuest;
     private float v=0;
+    private Connection connection;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -32,10 +39,10 @@ public class LoginFragment extends Fragment {
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_login, container, false);
 
-        editTextEmail = root.findViewById(R.id.email_login);
-        editTextPassword = root.findViewById(R.id.password_login);
-        buttonLogin = root.findViewById(R.id.button_login);
-        buttonLoginAsGuest = root.findViewById(R.id.button_login_guest);
+        editTextEmail = root.findViewById(R.id.et_loginEmail);
+        editTextPassword = root.findViewById(R.id.et_loginPassword);
+        buttonLogin = root.findViewById(R.id.b_login);
+        buttonLoginAsGuest = root.findViewById(R.id.b_loginAsGuest);
 
         editTextEmail.setTranslationX(800);
         editTextPassword.setTranslationX(800);
@@ -60,8 +67,8 @@ public class LoginFragment extends Fragment {
             {
                 String email = editTextEmail.getText().toString().trim();
                 String password = editTextPassword.getText().toString().trim();
-
-                if (!email.isEmpty() && !password.isEmpty())
+                Login(email, password, user);
+                /*if (!email.isEmpty() && !password.isEmpty())
                     Login(email, password, user);
                 else
                 {
@@ -69,7 +76,7 @@ public class LoginFragment extends Fragment {
                         editTextEmail.setError("Please insert your email address");
                     if (password.isEmpty())
                         editTextPassword.setError("Please insert your password");
-                }
+                }*/
             }
         });
 
@@ -89,7 +96,21 @@ public class LoginFragment extends Fragment {
     {
         try
         {
-            if(email.equals(user.getEmail()) && password.equals(user.getParola()))
+
+            StrictMode.ThreadPolicy threadPolicy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(threadPolicy);
+            Class.forName("oracle.jdbc.OracleDriver");
+            connection = DriverManager.getConnection("jdbc:oracle:thin:@192.168.1.134:1521:xe",
+                    "bogdan", "12345");
+
+            String query = "select * from utilizator where email='bogdan@mail.com' and password='123'";
+            PreparedStatement statement = connection.prepareStatement(query);
+            //statement.setString(1, email);
+            //statement.setString(2, password);
+
+            ResultSet resultSet = statement.executeQuery();
+            System.out.println("daaaaaaa");
+            /*if(email.equals(user.getEmail()) && password.equals(user.getParola()))
             {
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 intent.putExtra("nume", user.getNume());
@@ -106,11 +127,11 @@ public class LoginFragment extends Fragment {
                 Toast.makeText(getContext(), "Invalid credentials", Toast.LENGTH_SHORT).show();
                 editTextEmail.setText(null);
                 editTextPassword.setText(null);
-            }
+            }*/
         }
         catch (Exception e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("ERRRRRRRROARE"+e.getMessage());
             Toast.makeText(getContext(), "Couldn't logged you in", Toast.LENGTH_SHORT).show();
         }
     }
@@ -131,7 +152,7 @@ public class LoginFragment extends Fragment {
         }
         catch (Exception e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("ERRRRRRRROARE"+e.getMessage());
             Toast.makeText(getContext(), "Couldn't logged you in as a guest", Toast.LENGTH_SHORT).show();
         }
     }

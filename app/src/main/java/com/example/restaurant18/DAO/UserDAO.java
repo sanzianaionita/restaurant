@@ -43,7 +43,8 @@ public class UserDAO {
         statement.setString(3, user.getLastname());
         statement.setString(4, user.getEmail());
         statement.setString(5, user.getPassword());
-        statement.setString(6, user.getDate_of_birth());
+        statement.setString(5, user.getAppellative());
+        statement.setString(6, user.getBirthDate());
 
         try{
             statement.executeUpdate();
@@ -61,10 +62,9 @@ public class UserDAO {
         StringBuffer stringBuffer = new StringBuffer();
         ResultSet resultSet = statement.executeQuery("SELECT * FROM utilizator");
         while (resultSet.next()){
-            User user = new User(resultSet.getString(2), resultSet.getString(3),
+            User user = new User(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
                     resultSet.getString(4), resultSet.getString(5),
-                    resultSet.getString(6));
-            user.setId(resultSet.getInt(1));
+                    resultSet.getString(6), resultSet.getString(7));
             userList.add(user);
         }
         return userList;
@@ -80,10 +80,9 @@ public class UserDAO {
         ResultSet resultSet = statement.executeQuery();
 
         while (resultSet.next()){
-            user = new User(resultSet.getString(2), resultSet.getString(3),
+            user = new User(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
                     resultSet.getString(4), resultSet.getString(5),
-                    resultSet.getString(6));
-            user.setId(resultSet.getInt(1));
+                    resultSet.getString(6), resultSet.getString(7));
             break;
         }
         return user;
@@ -100,10 +99,9 @@ public class UserDAO {
         ResultSet resultSet = statement.executeQuery();
 
         while (resultSet.next()){
-            User user = new User(resultSet.getString(2), resultSet.getString(3),
+            User user = new User(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
                     resultSet.getString(4), resultSet.getString(5),
-                    resultSet.getString(6));
-            user.setId(resultSet.getInt(1));
+                    resultSet.getString(6), resultSet.getString(7));
             users.add(user);
             break;
         }
@@ -120,11 +118,9 @@ public class UserDAO {
         ResultSet resultSet = statement.executeQuery();
 
         resultSet.next();
-        user = new User(resultSet.getString(2), resultSet.getString(3),
-                    resultSet.getString(4), resultSet.getString(5),
-                    resultSet.getString(6));
-        user.setId(resultSet.getInt(1));
-
+        user = new User(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
+                resultSet.getString(4), resultSet.getString(5),
+                resultSet.getString(6), resultSet.getString(7));
 
         return user;
     }
@@ -162,6 +158,24 @@ public class UserDAO {
 
         statement.executeUpdate();
         connection.commit();
+    }
+
+    public User getUserByCredentials(String email, String password) throws SQLException {
+
+        User user;
+        String query = "SELECT * FROM utilizator WHERE email = ? AND password = ?";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, email);
+        statement.setString(2, password);
+
+        ResultSet resultSet = statement.executeQuery();
+
+        resultSet.next();
+        user = new User(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
+                resultSet.getString(4), resultSet.getString(5),
+                resultSet.getString(6), resultSet.getString(7));
+
+        return user;
     }
 
 }

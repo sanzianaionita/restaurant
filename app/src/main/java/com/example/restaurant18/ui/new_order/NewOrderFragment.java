@@ -76,10 +76,7 @@ public class NewOrderFragment extends Fragment {
 
                 int currentQuantity;
                 currentQuantity = returnQuantityFromListOfCurrentProduct(orderProductsList, currentProduct);
-                System.out.println(currentQuantity);
                 currentQuantity = currentQuantity+1;
-                System.out.println(currentQuantity);
-                //currentQuantity = Integer.parseInt(textViewQuantity.getText().toString())+1;
                 textViewQuantity.setText(String.valueOf(currentQuantity));
 
                 total = total+Double.parseDouble(currentProduct.getProductPrice());
@@ -94,9 +91,7 @@ public class NewOrderFragment extends Fragment {
                     orderProductsList.add(new OrderComponent(currentProduct, 1));
                 }
 
-                button.setText("Order "+returnNumberOfProductsFromList(orderProductsList)+" for "+total);
-
-                System.out.println("add"+position);
+                button.setText("Order "+String.valueOf(returnNumberOfProductsFromList(orderProductsList)+" for "+total));
             }
 
             @Override
@@ -110,10 +105,7 @@ public class NewOrderFragment extends Fragment {
 
                 int currentQuantity;
                 currentQuantity = returnQuantityFromListOfCurrentProduct(orderProductsList, currentProduct);
-                System.out.println(currentQuantity);
                 currentQuantity = currentQuantity-1;
-                System.out.println(currentQuantity);
-                //currentQuantity = Integer.parseInt(textViewQuantity.getText().toString())-1;
                 textViewQuantity.setText(String.valueOf(currentQuantity));
 
                 total = total-Double.parseDouble(currentProduct.getProductPrice());
@@ -125,14 +117,11 @@ public class NewOrderFragment extends Fragment {
                     textViewQuantity.setVisibility(View.INVISIBLE);
                     imageViewRemoveButton.setVisibility(View.INVISIBLE);
                     relativeLayoutProductFrame.setBackgroundColor(getResources().getColor(R.color.colorWhite));
-                    OrderComponent orderComponentToRemove = returnOrderComponentToRemoveFromList(orderProductsList);
-                    if(checkIfOrderComponentNotNull(orderComponentToRemove))
-                        orderProductsList.remove(orderComponentToRemove);
+                    if(returnPositionToRemoveFromList(orderProductsList)>=0)
+                        orderProductsList.remove(returnPositionToRemoveFromList(orderProductsList));
                 }
                 else
-                {
                     updateProductQuantityInList(orderProductsList,currentProduct,currentQuantity);
-                }
 
                 if(orderProductsList.size()==0)
                     button.setText("No products selected");
@@ -194,22 +183,13 @@ public class NewOrderFragment extends Fragment {
         return numberOfProducts;
     }
 
-    public OrderComponent returnOrderComponentToRemoveFromList(ArrayList<OrderComponent> orderProductsList){
+    public int returnPositionToRemoveFromList(ArrayList<OrderComponent> orderProductsList)
+    {
         int positionToRemove = -1;
         for (OrderComponent orderComponent: orderProductsList)
-        {
             if(orderComponent.getOrderProductQuantity() == 0)
                 positionToRemove = orderProductsList.indexOf(orderComponent);
-            break;
-        }
-        if(positionToRemove == -1)
-            return null;
-        else
-            return orderProductsList.get(positionToRemove);
-    }
-
-    public boolean checkIfOrderComponentNotNull(OrderComponent orderComponent){
-        return orderComponent != null;
+        return positionToRemove;
     }
 
     public void openFavoriteStoreDialog(Product product)

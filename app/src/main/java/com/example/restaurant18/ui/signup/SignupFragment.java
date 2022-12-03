@@ -18,16 +18,13 @@ import androidx.fragment.app.Fragment;
 
 import com.example.restaurant18.LoginSignupActivity;
 import com.example.restaurant18.R;
-import com.example.restaurant18.User;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.restaurant18.entity.User;
 
 public class SignupFragment extends Fragment {
 
     private RadioGroup radioGroup;
     private RadioButton radioButtonMr, radioButtonMrs;
-    private EditText editTextEmailSignup, editTextPasswordSignup, editTextPasswordConfirmSignup, editTextFirstName, editTextLastName;
+    private EditText editTextEmailSignup, editTextPasswordSignup, editTextPasswordConfirmSignup, editTextFirstName, editTextLastName, editTextBirthDate;
     private Button buttonSignUp;
     float v=0;
 
@@ -39,13 +36,14 @@ public class SignupFragment extends Fragment {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_signup, container, false);
 
         radioGroup = root.findViewById(R.id.radio_group);
-        radioButtonMr = root.findViewById(R.id.mr);
-        radioButtonMrs = root.findViewById(R.id.mrs);
-        editTextEmailSignup = root.findViewById(R.id.email_signup);
-        editTextFirstName = root.findViewById(R.id.first_name);
-        editTextLastName = root.findViewById(R.id.last_name);
-        editTextPasswordSignup = root.findViewById(R.id.password_signup);
-        editTextPasswordConfirmSignup = root.findViewById(R.id.password_confirm_signup);
+        radioButtonMr = root.findViewById(R.id.rb_mr);
+        radioButtonMrs = root.findViewById(R.id.rb_mrs);
+        editTextEmailSignup = root.findViewById(R.id.et_signupEmail);
+        editTextFirstName = root.findViewById(R.id.et_signupFirstName);
+        editTextLastName = root.findViewById(R.id.et_signupLastName);
+        editTextBirthDate = root.findViewById(R.id.et_signupBirthDate);
+        editTextPasswordSignup = root.findViewById(R.id.et_signupPassword);
+        editTextPasswordConfirmSignup = root.findViewById(R.id.et_signupPasswordConfirm);
         buttonSignUp = root.findViewById(R.id.button_signup);
 
 
@@ -110,11 +108,11 @@ public class SignupFragment extends Fragment {
             }
             else
             {
-                user.setEmail(email);
-                user.setNume(nume);
-                user.setPrenume(prenume);
-                user.setParola(password);
-                user.setSex(apelativ);
+                //user.setEmail(email);
+               //user.setNume(nume);
+                //user.setPrenume(prenume);
+                //user.setParola(password);
+                //user.setSex(apelativ);
                 radioButtonMr.post(new Runnable() {
                     @Override
                     public void run() {

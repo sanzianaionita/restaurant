@@ -2,7 +2,6 @@ package com.example.restaurant18.ui.profile_settings;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +18,8 @@ import androidx.navigation.Navigation;
 
 import com.example.restaurant18.MainActivity;
 import com.example.restaurant18.R;
-import com.example.restaurant18.User;
-import com.example.restaurant18.databinding.FragmentHomeBinding;
 import com.example.restaurant18.databinding.FragmentProfileSettingsBinding;
+import com.example.restaurant18.entity.User;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -51,12 +49,13 @@ public class ProfileSettingsFragment extends Fragment {
         editTextEmail = root.findViewById(R.id.et_profileSettingsEmail);
         editTextFirstName = root.findViewById(R.id.et_profileSettingsFirstName);
         editTextLastName = root.findViewById(R.id.et_profileSettingsLastName);
-        editTextPhone = root.findViewById(R.id.et_profileSettingsPhone);
-        editTextAddress = root.findViewById(R.id.et_profileSettingsAddress);
+        //editTextPhone = root.findViewById(R.id.et_profileSettingsPhone);
+        //editTextAddress = root.findViewById(R.id.et_profileSettingsAddress);
         editTextBirthDate = root.findViewById(R.id.et_profileSettingsBirthDate);
         buttonSaveChanges = root.findViewById(R.id.b_profileSettingsSave);
         user = ((MainActivity)getActivity()).getUser();
 
+        /*
         if(user.getSex().equals("Mr"))
             radioButtonMr.setChecked(true);
         else
@@ -66,7 +65,7 @@ public class ProfileSettingsFragment extends Fragment {
         editTextEmail.setText(user.getEmail());
         editTextPhone.setText(user.getPhoneNumber());
         editTextBirthDate.setText(user.getBirthDate());
-        editTextAddress.setText(user.getAddress());
+        editTextAddress.setText(user.getAddress());*/
 
 
         buttonSaveChanges.setOnClickListener(new View.OnClickListener() {
@@ -163,11 +162,11 @@ public class ProfileSettingsFragment extends Fragment {
     {
         try
         {
-            user.setNume(lastName);
+            /*user.setNume(lastName);
             user.setPrenume(firstName);
             user.setPhoneNumber(phoneNumber);
             user.setSex(sex);
-            user.setAddress(address);
+            user.setAddress(address);*/
             user.setBirthDate(birthDate);
             Toast.makeText(getContext(), "Changes saved", Toast.LENGTH_SHORT).show();
             Navigation.findNavController(getActivity(), R.id.nav_profile).navigate(R.id.action_nav_profile_to_nav_home);

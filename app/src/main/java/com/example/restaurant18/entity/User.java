@@ -13,25 +13,33 @@ public class User {
     private String lastname;
     private String email;
     private String password;
-    private String date_of_birth;
+    private String birthDate;
+    private String appellative;
 
-    public User(String firstname, String lastname, String email, String password, String date_of_birth) {
+    public User(int id,String firstname, String lastname, String email, String password, String appellative,String birthDate) {
+        this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
-        this.date_of_birth = date_of_birth;
+        this.appellative = appellative;
+        this.birthDate = birthDate;
     }
 
-    public User(String firstname, String lastname, String email, String password, Date date_of_birth) {
+    public User(int id, String firstname, String lastname, String email, String password, String appellative, Date birthDate) {
+        this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
+        this.appellative = appellative;
+
         String pattern = "dd-MM-yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        this.birthDate = simpleDateFormat.format(birthDate);
+    }
 
-        this.date_of_birth = simpleDateFormat.format(date_of_birth);
+    public User() {
     }
 
     public int getId() {
@@ -74,13 +82,22 @@ public class User {
         this.password = password;
     }
 
-    public String getDate_of_birth() {
-        return date_of_birth;
+    public String getBirthDate() {
+        return birthDate;
     }
 
-    public void setDate_of_birth(String date_of_birth) {
-        this.date_of_birth = date_of_birth;
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
+
+    public String getAppellative() {
+        return appellative;
+    }
+
+    public void setAppellative(String appellative) {
+        this.appellative = appellative;
+    }
+
 
     @Override
     public boolean equals(@Nullable Object obj) {
@@ -91,7 +108,8 @@ public class User {
                     objuser.getLastname().equals(this.getLastname()) &&
                     objuser.getEmail().equals(this.getEmail()) &&
                     objuser.getPassword().equals(this.getPassword()) &&
-                    objuser.getDate_of_birth().equals(this.getDate_of_birth())
+                    objuser.getAppellative().equals(this.getAppellative()) &&
+                    objuser.getBirthDate().equals(this.getBirthDate())
             )
                 return true;
             return false;
@@ -102,8 +120,8 @@ public class User {
     @NonNull
     @Override
     public String toString() {
-        return "FirstName:" + firstname + "\n"+
-                "LastName:" + lastname + "\n" + "Email:" + email + "\n" + "Password:"+
-                password + "\n" + "DateOfBirth" + date_of_birth + "\n";
+        return "FirstName: " + firstname + "\n"+ "LastName: " + lastname + "\n" +
+                "Email: " + email + "\n" + "Password: "+ password + "\n" +
+                "Appellative: " + appellative + "\n" + "BirthDate: " + birthDate + "\n";
     }
 }
