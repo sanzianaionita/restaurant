@@ -26,6 +26,7 @@ import com.example.restaurant18.DAO.FavoritDAO;
 import com.example.restaurant18.DAO.OrderDAO;
 import com.example.restaurant18.DAO.OrderProductDAO;
 import com.example.restaurant18.DAO.ProductDAO;
+import com.example.restaurant18.DAO.UserDAO;
 import com.example.restaurant18.MainActivity;
 import com.example.restaurant18.OrderComponent;
 import com.example.restaurant18.R;
@@ -162,11 +163,6 @@ public class NewOrderFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 try {
-                    connection = DatabaseHandler.createDbConn();
-
-                    // prima data se insereaza comanda in baza de date
-                    OrderDAO orderDAO = new OrderDAO(connection);
-
                     // main to find userId for order
                     MainActivity main = (MainActivity) getActivity();
                     User user = main.getUser();
@@ -176,8 +172,12 @@ public class NewOrderFragment extends Fragment {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
                     String formattedDate = dateFormat.format(date);
 
+                    // prima data se insereaza comanda in baza de date
                     Order order = new Order(user.getId(), formattedDate, OrderStatus.PLACED.getCode(),
                             "a random address", null);
+
+                    connection = DatabaseHandler.createDbConn();
+                    OrderDAO orderDAO = new OrderDAO(connection);
                     orderDAO.createOrder(order);
 
                     connection.close();
@@ -190,11 +190,16 @@ public class NewOrderFragment extends Fragment {
 
                     connection.close();
 
+                    Toast.makeText(getContext(), "Order placed successfully. We have contacted " +
+                            "you via email for further details.", Toast.LENGTH_LONG).show();
 
+                    main.onBackPressed();
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
+                    Toast.makeText(getContext(), "An error occurred", Toast.LENGTH_SHORT).show();
                 } catch (SQLException e) {
                     e.printStackTrace();
+                    Toast.makeText(getContext(), "An error occurred with the database", Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -105,6 +105,8 @@ public class LoginFragment extends Fragment {
             UserDAO userDAO = new UserDAO(connection);
             user = userDAO.getUserByCredentials(email,password);
 
+            connection.close();
+
             if(user == null)
             {
                 Toast.makeText(getContext(), "Invalid credentials", Toast.LENGTH_SHORT).show();
@@ -133,6 +135,24 @@ public class LoginFragment extends Fragment {
             Intent intent = new Intent(getActivity(), MainActivity.class);
             String uuid = String.valueOf(randomUUID());
             User userGuest = new User("Guest",uuid,"-","-","Mr","01-01-1000");
+
+            connection = DatabaseHandler.createDbConn();
+            UserDAO userDAO = new UserDAO(connection);
+
+            // daca nu exista guest in abza de date il inseram noi, cu id-ul 998
+            if(userDAO.getUserByID(998) == null){
+                userGuest.setId(998);
+                userDAO.createGuestUser(userGuest);
+            } else{
+                // daca guest-ul deja exista in baza de date
+                // doar facem update la campul 'lastname' cu uuid-ul corespunzator
+                String[] fieldsToUpdate = new String[]{"lastname"};
+                String[] values = new String[]{uuid};
+
+                userGuest.setId(998);
+                userDAO.editUser(userGuest.getId(), fieldsToUpdate, values);
+            }
+
             intent.putExtra("user",userGuest);
             intent.putExtra("guest", true);
             startActivity(intent);
