@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -160,9 +161,23 @@ public class ProfileSettingsFragment extends Fragment {
             user.setAppellative(appellative);
             user.setBirthDate(birthDate);
             Toast.makeText(getContext(), "Changes saved", Toast.LENGTH_SHORT).show();
-            MainActivity main = (MainActivity) getActivity();
 
-            Navigation.findNavController(main, R.id.nav_profile).navigate(R.id.action_nav_profile_to_nav_home);
+            ImageView imageViewUser;
+            TextView textViewUserName, textViewEmail;
+            MainActivity main = (MainActivity) getActivity();
+            View viewHeader = main.returnView();
+            imageViewUser = viewHeader.findViewById(R.id.imageViewUserLogo);
+            textViewUserName = viewHeader.findViewById(R.id.textViewUserName);
+            textViewEmail = viewHeader.findViewById(R.id.textViewEmail);
+            if (user.getAppellative().equalsIgnoreCase("Mr"))
+                imageViewUser.setImageResource(R.mipmap.png_man);
+            else
+                imageViewUser.setImageResource(R.mipmap.png_woman);
+            textViewUserName.setText("Hello, "+user.getFirstname()+" "+user.getLastname());
+            textViewEmail.setText(user.getEmail());
+            //MainActivity main = (MainActivity) getActivity();
+
+            //Navigation.findNavController(main,R.id.nav_profile).navigate(R.id.action_nav_profile_to_nav_home);
         }
         catch (Exception e)
         {

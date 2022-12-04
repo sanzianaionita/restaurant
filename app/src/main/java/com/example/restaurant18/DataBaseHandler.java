@@ -7,9 +7,9 @@ import java.sql.SQLException;
 public class DataBaseHandler {
 
     private static final String DRIVER = "oracle.jdbc.driver.OracleDriver";
-    private  static final String URL = "jdbc:oracle:thin:@192.168.100.34:1521:XE";
-    private static final String USERNAME = "raisa";
-    private static final String PASSWORD = "Sasakisan";
+    private  static final String URL = "jdbc:oracle:thin:@192.168.1.134:1521:XE";
+    private static final String USERNAME = "bogdan";
+    private static final String PASSWORD = "12345";
 
     private static Connection connection;
 

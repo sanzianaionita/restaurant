@@ -160,7 +160,7 @@ public class SignupFragment extends Fragment {
                     Toast.makeText(getContext(), "Sign up completed", Toast.LENGTH_SHORT).show();
                 }
                 else
-                    Toast.makeText(getContext(), "Sign up completed NO", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Couldn't sign you up", Toast.LENGTH_SHORT).show();
             }
         }
         catch (Exception e)

@@ -88,7 +88,7 @@ public class RecycleViewAdapterAllProducts extends RecyclerView.Adapter<RecycleV
         viewHolder.textViewProductQuantity.setText("0");
         viewHolder.textViewProductQuantity.setVisibility(View.INVISIBLE);
         viewHolder.imageViewRemoveButton.setVisibility(View.INVISIBLE);
-        viewHolder.imageViewProductImage.setImageResource(R.mipmap.png_man);
+        viewHolder.imageViewProductImage.setImageResource(R.mipmap.png_logo);
     }
 
     @Override

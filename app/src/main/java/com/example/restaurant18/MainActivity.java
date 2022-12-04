@@ -10,7 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.restaurant18.DAO.UserDAO;
 import com.example.restaurant18.entity.User;
+import com.example.restaurant18.utils.DatabaseHandler;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -30,6 +32,7 @@ import com.example.restaurant18.entity.Product;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,12 +40,11 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
 
-    private ArrayList<Product> favoriteProductsList = new ArrayList<>();
-
     private ImageView imageViewUser;
     private TextView textViewUserName, textViewEmail;
     private User user;
     private Boolean guest_received;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         DrawerLayout drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
+        navigationView = binding.navView;
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_restaurant_menu, R.id.nav_home, R.id.nav_new_order, R.id.nav_profile, R.id.nav_favorite_product)
                 .setOpenableLayout(drawer)
@@ -78,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         textViewEmail = viewHeader.findViewById(R.id.textViewEmail);
 
         if(!guest_received){
-            if (user.getAppellative().equals("Mr"))
+            if (user.getAppellative().equalsIgnoreCase("Mr"))
                 imageViewUser.setImageResource(R.mipmap.png_man);
             else
                 imageViewUser.setImageResource(R.mipmap.png_woman);
@@ -86,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             textViewEmail.setText(user.getEmail());
         } else{
             imageViewUser.setImageResource(R.mipmap.ic_launcher_round);
-            textViewUserName.setText("Hello, guest!");
+            textViewUserName.setText("Hello, "+user.getFirstname()+" "+user.getLastname());
             textViewEmail.setText("guest");
         }
 
@@ -143,27 +145,17 @@ public class MainActivity extends AppCompatActivity {
         return user;
     }
 
-    public String addProductToFavoriteProductsList(Product productToAdd)
+    public boolean checkIfGuestUser()
     {
-        boolean productExists = false;
-        String message;
-        for (Product product : favoriteProductsList) {
-            if(product.getProductName().equals(productToAdd.getProductName()))
-                productExists = true;
-        }
-        if(productExists)
-            message = "Product already exists in your favorite products list";
+        if(guest_received)
+            return true;
         else
-        {
-            favoriteProductsList.add(productToAdd);
-            message = "Product added to your favorite products list";
-        }
-        return message;
+            return false;
     }
 
-    public ArrayList<Product> getFavoriteProductsList() {
-        return favoriteProductsList;
+    public View returnView()
+    {
+        View viewHeader = navigationView.getHeaderView(0);
+        return viewHeader;
     }
-
-
 }

@@ -72,7 +72,7 @@ public class RecycleViewAdapterFavoriteProducts extends RecyclerView.Adapter<Rec
         Product product = favoriteProductsArrayList.get(position);
         viewHolder.textViewProductName.setText(product.getProductName());
         viewHolder.textViewProductPrice.setText(product.getProductPrice().toString());
-        viewHolder.imageViewProductImage.setImageResource(R.mipmap.png_man);
+        viewHolder.imageViewProductImage.setImageResource(R.mipmap.png_logo);
     }
 
     @Override

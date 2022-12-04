@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.example.restaurant18.DAO.FavoritDAO;
 import com.example.restaurant18.DAO.OrderDAO;
 import com.example.restaurant18.DAO.OrderProductDAO;
 import com.example.restaurant18.DAO.ProductDAO;
@@ -30,6 +31,7 @@ import com.example.restaurant18.OrderComponent;
 import com.example.restaurant18.R;
 import com.example.restaurant18.RecycleViewAdapterAllProducts;
 import com.example.restaurant18.databinding.FragmentNewOrderBinding;
+import com.example.restaurant18.entity.Favorit;
 import com.example.restaurant18.entity.Order;
 import com.example.restaurant18.entity.User;
 import com.example.restaurant18.enums.OrderStatus;
@@ -151,7 +153,7 @@ public class NewOrderFragment extends Fragment {
             @Override
             public void itemLongClick(View v, int position){
                 Product currentProduct = productsList.get(position);
-                openFavoriteStoreDialog(currentProduct);
+                openFavoriteProductDialog(currentProduct);
                 //Toast.makeText(getContext(), "Couldn't save your changes", Toast.LENGTH_SHORT).show();
             }
         });
@@ -251,7 +253,7 @@ public class NewOrderFragment extends Fragment {
         return positionToRemove;
     }
 
-    public void openFavoriteStoreDialog(Product product)
+    public void openFavoriteProductDialog(Product product)
     {
         dialog.setContentView(R.layout.dialog_favorite_product);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -273,11 +275,51 @@ public class NewOrderFragment extends Fragment {
         button_yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String message = ((MainActivity)getActivity()).addProductToFavoriteProductsList(product);
-                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
+                MainActivity main = (MainActivity) getActivity();
+                if(main.checkIfGuestUser())
+                    Toast.makeText(getContext(), "You can't add products to favorite products list as guest", Toast.LENGTH_SHORT).show();
+                else
+                    addSelectedProductToFavoriteProductsList(product);
             }
         });
         dialog.show();
     }
+
+    private void addSelectedProductToFavoriteProductsList(Product selectedProduct)
+    {
+        try
+        {
+            Favorit auxFavorit;
+            connection = DatabaseHandler.createDbConn();
+            FavoritDAO favoritDAO = new FavoritDAO(connection);
+
+            MainActivity main = (MainActivity) getActivity();
+            User user = main.getUser();
+
+            auxFavorit = favoritDAO.getFavoritByUserIdProductId(user.getId(), selectedProduct.getId());
+            if(auxFavorit != null)
+            {
+                Toast.makeText(getContext(), "This product already exists in your favorite products list", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                if(favoritDAO.insertFavoriteProduct(user.getId(), selectedProduct.getId()))
+                {
+                    Toast.makeText(getContext(), "Product added to your favorite products list", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+                else
+                {
+                    Toast.makeText(getContext(), "Couldn't add selected product into your favorite products list", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+            }
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

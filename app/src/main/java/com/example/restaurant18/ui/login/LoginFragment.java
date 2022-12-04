@@ -132,10 +132,8 @@ public class LoginFragment extends Fragment {
         {
             Intent intent = new Intent(getActivity(), MainActivity.class);
             String uuid = String.valueOf(randomUUID());
-            intent.putExtra("nume", uuid);
-            intent.putExtra("email", "");
-            intent.putExtra("prenume", "Guest");
-            intent.putExtra("apelativ", "Mr");
+            User userGuest = new User("Guest",uuid,"-","-","Mr","01-01-1000");
+            intent.putExtra("user",userGuest);
             intent.putExtra("guest", true);
             startActivity(intent);
             getActivity().finish();
