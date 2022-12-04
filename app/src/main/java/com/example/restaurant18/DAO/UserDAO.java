@@ -18,7 +18,7 @@ public class UserDAO {
         this.connection = connection;
     }
 
-    private int getLastID() throws SQLException {
+    public int getLastID() throws SQLException {
         int id;
 
         Statement statement = connection.createStatement();
@@ -39,7 +39,7 @@ public class UserDAO {
 
         int id = getLastID();
         statement.setInt(1, id);
-        
+
         statement.setString(2, user.getFirstname());
         statement.setString(3, user.getLastname());
         statement.setString(4, user.getEmail());
@@ -47,10 +47,10 @@ public class UserDAO {
         statement.setString(7, user.getAppellative());
         statement.setString(6, user.getBirthDate());
 
-        try{
+        try {
             statement.executeUpdate();
             connection.commit();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             return false;
         }
         return true;
@@ -62,7 +62,7 @@ public class UserDAO {
         Statement statement = connection.createStatement();
         StringBuffer stringBuffer = new StringBuffer();
         ResultSet resultSet = statement.executeQuery("SELECT * FROM utilizator");
-        while (resultSet.next()){
+        while (resultSet.next()) {
             User user = new User(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
                     resultSet.getString(4), resultSet.getString(5),
                     resultSet.getString(7), resultSet.getDate(6));
@@ -80,7 +80,7 @@ public class UserDAO {
 
         ResultSet resultSet = statement.executeQuery();
 
-        while (resultSet.next()){
+        while (resultSet.next()) {
             user = new User(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
                     resultSet.getString(4), resultSet.getString(5),
                     resultSet.getString(7), resultSet.getDate(6));
@@ -99,7 +99,7 @@ public class UserDAO {
 
         ResultSet resultSet = statement.executeQuery();
 
-        while (resultSet.next()){
+        while (resultSet.next()) {
             User user = new User(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
                     resultSet.getString(4), resultSet.getString(5),
                     resultSet.getString(7), resultSet.getDate(6));
@@ -118,7 +118,7 @@ public class UserDAO {
 
         ResultSet resultSet = statement.executeQuery();
 
-        if(resultSet.next()) {
+        if (resultSet.next()) {
             user = new User(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
                     resultSet.getString(4), resultSet.getString(5),
                     resultSet.getString(7), resultSet.getDate(6));
@@ -129,16 +129,16 @@ public class UserDAO {
     public void editUser(int ID, String[] fieldsToUpdate, String values[]) throws SQLException {
 
         String query = "UPDATE utilizator SET ";
-        for (int i=0; i<fieldsToUpdate.length; i++){
+        for (int i = 0; i < fieldsToUpdate.length; i++) {
             String field = fieldsToUpdate[i];
             String value = values[i];
-            if(!field.equals("date_of_birth")){
-                query += field + " = '" + value+"'";
-            } else{
-                query += field + " = TO_DATE('" + value+"', 'dd-MM-yyyy')";
+            if (!field.equals("date_of_birth")) {
+                query += field + " = '" + value + "'";
+            } else {
+                query += field + " = TO_DATE('" + value + "', 'dd-MM-yyyy')";
             }
 
-            if(i != fieldsToUpdate.length - 1){
+            if (i != fieldsToUpdate.length - 1) {
                 query += ", ";
             }
         }

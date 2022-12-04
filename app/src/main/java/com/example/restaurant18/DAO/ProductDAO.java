@@ -20,7 +20,7 @@ public class ProductDAO {
         this.connection = connection;
     }
 
-    public void createProduct(Product product){
+    public int createProduct(Product product) {
         String insertQuery = "insert into product (product_name, product_description, product_price, product_quantity, product_type) " +
                 "values (?,?,?,?,?)";
         String findProductQuery = "select product_name from product where product_name=?";
@@ -38,12 +38,14 @@ public class ProductDAO {
                 insertStatement.setInt(4, product.getProductQuantity());
                 insertStatement.setString(5, product.getProductType());
 
-                insertStatement.executeUpdate();
+                int numberOfRowsAffected = insertStatement.executeUpdate();
                 connection.commit();
+                return numberOfRowsAffected;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return 0;
     }
 
     public void createProducts() {
@@ -207,15 +209,7 @@ public class ProductDAO {
 
         }
     }
-/*
-    public void main(String[] args) {
-        List<Product> products = generateInitialListOfProducts();
-        for (Product product:
-             products) {
-            createProduct(product);
-        }
-    }
-*/
+
     private List<Product> generateInitialListOfProducts() {
 
         Product product1 = new Product("Pizza Margherita", "sos de rosii si mozarella", 38.00, 25, ProductType.PIZZA.getCode());
