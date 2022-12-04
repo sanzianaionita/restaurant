@@ -110,4 +110,45 @@ public class UserTest {
         assertTrue(users.isEmpty());
         connection.close();
     }
+
+    /////facute de andrei
+    @Test
+    public void GetUserByEmailSuccessfulTest() throws SQLException {
+        User userCorrect = new User(0,"admin", "admin",
+                "admin@mail.com", "admin",
+                "mrs", "24-12-2000");
+        createConnection();
+        UserDAO userDAO = new UserDAO(connection);
+        User user = userDAO.getUserByEmail("admin@mail.com");
+        assertEquals(userCorrect , user);
+        connection.close();
+    }
+
+    @Test
+    public void GetUserByEmailFailedTest() throws SQLException {
+        createConnection();
+        UserDAO userDAO = new UserDAO(connection);
+        User user = userDAO.getUserByEmail("non_existin@mail.com");
+        assertEquals(user, null);
+        connection.close();
+    }
+
+    @Test
+    public void EditUserTest() throws SQLException {
+        String newFirstName = "Ioana";
+        String newLastName = "Ionescu";
+        createConnection();
+        UserDAO userDAO = new UserDAO(connection);
+        String fieldsToEdit[] = {"firstname", "lastname"};
+        String[] values = {"Maria", "Miron"};
+        userDAO.editUser(10, fieldsToEdit, values);
+
+        User user = new User(10,"Maria", "Miron",
+                "rai@mail.com", "test",
+                "mrs", "24-12-2000");
+
+        User selected = userDAO.getUserByEmail("rai@mail.com");
+
+        assertEquals(user, selected);
+    }
 }
