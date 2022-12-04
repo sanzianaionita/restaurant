@@ -31,7 +31,7 @@ public class UserTest {
 
     @Test
     public void testCreateUser_created() throws SQLException {
-        String statementQuery = "INSERT INTO utilizator VALUES (?,?,?,?,?,TO_DATE(?,'DD-MM-YYYY'), ?)";
+        String statementQuery = "INSERT INTO utilizator VALUES (?,?,?,?,?,?,TO_DATE(?,'DD-MM-YYYY'))";
 
         PreparedStatement preparedStatementMocked = mock(PreparedStatement.class);
         Statement statementMocked = mock(Statement.class);
@@ -50,7 +50,7 @@ public class UserTest {
 
     @Test
     public void testCreateUser_notCreated() throws SQLException {
-        String statementQuery = "INSERT INTO utilizator VALUES (?,?,?,?,?,TO_DATE(?,'DD-MM-YYYY'), ?)";
+        String statementQuery = "INSERT INTO utilizator VALUES (?,?,?,?,?,?,TO_DATE(?,'DD-MM-YYYY'))";
 
         PreparedStatement preparedStatementMocked = mock(PreparedStatement.class);
         Statement statementMocked = mock(Statement.class);
