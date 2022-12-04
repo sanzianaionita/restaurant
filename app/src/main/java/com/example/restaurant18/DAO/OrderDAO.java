@@ -3,6 +3,7 @@ package com.example.restaurant18.DAO;
 import android.util.Log;
 
 import com.example.restaurant18.entity.Order;
+import com.example.restaurant18.enums.OrderStatus;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -41,32 +42,30 @@ public class OrderDAO {
         if(order.getDescription() != null){
             statementQuery = "INSERT INTO comanda VALUES (?,?,TO_DATE(?,'DD-MM-YYYY'),?,?,?)";
         } else{
-            statementQuery = "INSERT INTO comanda VALUES (?,?,TO_DATE(?,'DD-MM-YYYY'),?,?)";
+            statementQuery = "INSERT INTO comanda VALUES (?,?,TO_DATE(?,'DD-MM-YYYY'),?,?,?)";
         }
 
         PreparedStatement statement = connection.prepareStatement(statementQuery);
         Log.v("test","test1992111");
         int id = getLastID();
-        statement.setInt(1, id );
+        statement.setInt(1, id);
+        order.setId(id);
         statement.setInt(2, order.getUserId());
         statement.setString(3, order.getDate());
         statement.setString(4, order.getStatus());
         statement.setString(5, order.getAddress());
         if(order.getDescription() != null){
             statement.setString(6, order.getDescription());
+        } else{
+            statement.setString(6, "");
         }
 
-        Log.v("test19",String.valueOf(order.getUserId())+String.valueOf(order.getUserId())+order.getStatus()+order.getDate()+order.getAddress()+order.getDescription()) ;
-        Log.v("test","test19922222");
         try{
-            Log.v("test","test1992yuyuy");
             statement.executeQuery();
-            Log.v("test","test1992yuyuy2");
 
             connection.commit();
-            Log.v("test","test1992uuu");
         }catch (SQLException e){
-            Log.v("test",e.getMessage());
+            Log.v("testOrder",e.getMessage());
             return false;
         }
         return true;
@@ -94,7 +93,7 @@ public class OrderDAO {
         List<Order> orderList = new ArrayList<>();
         Statement statement = connection.createStatement();
         StringBuffer stringBuffer = new StringBuffer();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM comanda WHERE status = 'delivering'");
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM comanda WHERE status = " + OrderStatus.DELIVERING.getCode());
         while (resultSet.next()){
             Order order = new Order(0, resultSet.getInt(2), resultSet.getString(3),
                     resultSet.getString(4), resultSet.getString(5));
@@ -111,7 +110,41 @@ public class OrderDAO {
         List<Order> orderList = new ArrayList<>();
         Statement statement = connection.createStatement();
         StringBuffer stringBuffer = new StringBuffer();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM comanda WHERE status = 'done'");
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM comanda WHERE status = " + OrderStatus.DONE.getCode());
+        while (resultSet.next()){
+            Order order = new Order(0, resultSet.getInt(2), resultSet.getString(3),
+                    resultSet.getString(4), resultSet.getString(5));
+            order.setId(resultSet.getInt(1));
+            if(resultSet.getString(6) != null){
+                order.setDescription(resultSet.getString(6));
+            }
+            orderList.add(order);
+        }
+        return orderList;
+    }
+
+    public List<Order> getAllPlacedOrders() throws SQLException {
+        List<Order> orderList = new ArrayList<>();
+        Statement statement = connection.createStatement();
+        StringBuffer stringBuffer = new StringBuffer();
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM comanda WHERE status = " + OrderStatus.PLACED.getCode());
+        while (resultSet.next()){
+            Order order = new Order(0, resultSet.getInt(2), resultSet.getString(3),
+                    resultSet.getString(4), resultSet.getString(5));
+            order.setId(resultSet.getInt(1));
+            if(resultSet.getString(6) != null){
+                order.setDescription(resultSet.getString(6));
+            }
+            orderList.add(order);
+        }
+        return orderList;
+    }
+
+    public List<Order> getAllPreparingOrders() throws SQLException {
+        List<Order> orderList = new ArrayList<>();
+        Statement statement = connection.createStatement();
+        StringBuffer stringBuffer = new StringBuffer();
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM comanda WHERE status = " + OrderStatus.PREPARING.getCode());
         while (resultSet.next()){
             Order order = new Order(0, resultSet.getInt(2), resultSet.getString(3),
                     resultSet.getString(4), resultSet.getString(5));
@@ -127,7 +160,7 @@ public class OrderDAO {
     public List<Order> getAllDoneOrdersByUserId(int userId) throws SQLException {
         List<Order> orderList = new ArrayList<>();
         StringBuffer stringBuffer = new StringBuffer();
-        String query = "SELECT * FROM comanda WHERE status = 'done' AND user_id = ? ";
+        String query = "SELECT * FROM comanda WHERE status = " + OrderStatus.DONE.getCode() + " AND user_id = ? ";
         PreparedStatement statement = connection.prepareStatement(query);
         statement.setInt(1, userId);
         ResultSet resultSet = statement.executeQuery(query);

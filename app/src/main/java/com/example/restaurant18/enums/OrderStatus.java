@@ -3,7 +3,8 @@ package com.example.restaurant18.enums;
 public enum OrderStatus {
     DONE("DONE"),
     DELIVERING("DELIVERING"),
-    PREPARING("PREPARING");
+    PREPARING("PREPARING"),
+    PLACED("PLACED");
 
     private String code;
 

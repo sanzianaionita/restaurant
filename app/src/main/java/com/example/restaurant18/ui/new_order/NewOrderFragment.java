@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import java.sql.Connection;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,23 +15,34 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ComponentActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.example.restaurant18.DAO.OrderDAO;
+import com.example.restaurant18.DAO.OrderProductDAO;
 import com.example.restaurant18.DAO.ProductDAO;
 import com.example.restaurant18.MainActivity;
 import com.example.restaurant18.OrderComponent;
 import com.example.restaurant18.R;
 import com.example.restaurant18.RecycleViewAdapterAllProducts;
 import com.example.restaurant18.databinding.FragmentNewOrderBinding;
+import com.example.restaurant18.entity.Order;
+import com.example.restaurant18.entity.User;
+import com.example.restaurant18.enums.OrderStatus;
+import com.example.restaurant18.utils.DatabaseHandler;
 import com.google.android.material.snackbar.Snackbar;
 import com.example.restaurant18.entity.Product;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class NewOrderFragment extends Fragment {
 
@@ -39,6 +51,7 @@ public class NewOrderFragment extends Fragment {
     Dialog dialog;
     ArrayList<Product> productsList = new ArrayList<>();
     ArrayList<OrderComponent> orderProductsList = new ArrayList<>();
+    Connection connection;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -51,8 +64,13 @@ public class NewOrderFragment extends Fragment {
         dialog = new Dialog(getContext());
 
         try {
-            productsList = ProductDAO.getAllProducts();
+            connection = DatabaseHandler.createDbConn();
+
+            productsList = ProductDAO.getAllProducts(connection);
+            connection.close();
         } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -135,6 +153,47 @@ public class NewOrderFragment extends Fragment {
                 Product currentProduct = productsList.get(position);
                 openFavoriteStoreDialog(currentProduct);
                 //Toast.makeText(getContext(), "Couldn't save your changes", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    connection = DatabaseHandler.createDbConn();
+
+                    // prima data se insereaza comanda in baza de date
+                    OrderDAO orderDAO = new OrderDAO(connection);
+
+                    // main to find userId for order
+                    MainActivity main = (MainActivity) getActivity();
+                    User user = main.getUser();
+
+                    // date for order
+                    Date date = new Date();
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                    String formattedDate = dateFormat.format(date);
+
+                    Order order = new Order(user.getId(), formattedDate, OrderStatus.PLACED.getCode(),
+                            "a random address", null);
+                    orderDAO.createOrder(order);
+
+                    connection.close();
+
+                    // apoi inseram si in tabelul asociativ
+                    connection = DatabaseHandler.createDbConn();
+
+                    OrderProductDAO orderProductDAO = new OrderProductDAO(connection);
+                    orderProductDAO.createOrderProduct(orderProductsList, order);
+
+                    connection.close();
+
+
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

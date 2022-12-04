@@ -28,6 +28,15 @@ public class Product {
         this.productType = productType;
     }
 
+    public Product(int id, String productName, String productDescription, Double productPrice, Integer productQuantity, String productType) {
+        this(productName, productDescription, productPrice, productQuantity, productType);
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
     public String getProductName() {
         return productName;
     }

@@ -20,6 +20,7 @@ import com.example.restaurant18.LoginSignupActivity;
 import com.example.restaurant18.MainActivity;
 import com.example.restaurant18.R;
 import com.example.restaurant18.entity.User;
+import com.example.restaurant18.utils.DatabaseHandler;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -32,10 +33,6 @@ public class LoginFragment extends Fragment {
     private Button buttonLogin, buttonLoginAsGuest;
     private float v=0;
 
-    private static final String DRIVER = "oracle.jdbc.driver.OracleDriver";
-    private  static final String URL = "jdbc:oracle:thin:@192.168.100.34:1521:XE";
-    private static final String USERNAME = "raisa";
-    private static final String PASSWORD = "Sasakisan";
     private Connection connection;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -102,11 +99,8 @@ public class LoginFragment extends Fragment {
     {
         try
         {
-            StrictMode.ThreadPolicy threadPolicy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(threadPolicy);
 
-            Class.forName(DRIVER);
-            connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            connection = DatabaseHandler.createDbConn();
 
             UserDAO userDAO = new UserDAO(connection);
             user = userDAO.getUserByCredentials(email,password);
@@ -128,7 +122,7 @@ public class LoginFragment extends Fragment {
         catch (Exception e)
         {
             System.out.println(e.getMessage());
-            Toast.makeText(getContext(), "Invalid credentials or user doesn't exits in database", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Invalid credentials or user doesn't exist in database", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -79,6 +79,28 @@ public class ProductDAO {
         });
     }
 
+    public static ArrayList<Product> getAllProducts(Connection conn) throws SQLException {
+        connection = conn;
+        ArrayList<Product> productsByType = new ArrayList<>();
+        String query = "SELECT * FROM product";
+        PreparedStatement statement = connection.prepareStatement(query);
+
+        ResultSet resultSet = statement.executeQuery();
+
+        while (resultSet.next()) {
+            Product product = new Product(
+                    resultSet.getInt(1),
+                    resultSet.getString(2),
+                    resultSet.getString(3),
+                    resultSet.getDouble(4),
+                    resultSet.getInt(5),
+                    resultSet.getString(6));
+
+            productsByType.add(product);
+        }
+        return productsByType;
+    }
+
     public static ArrayList<Product> getAllProducts() throws SQLException {
         ArrayList<Product> productsByType = new ArrayList<>();
         String query = "SELECT * FROM product";
@@ -87,7 +109,9 @@ public class ProductDAO {
         ResultSet resultSet = statement.executeQuery();
 
         while (resultSet.next()) {
-            Product product = new Product(resultSet.getString(2),
+            Product product = new Product(
+                    resultSet.getInt(1),
+                    resultSet.getString(2),
                     resultSet.getString(3),
                     resultSet.getDouble(4),
                     resultSet.getInt(5),
@@ -107,7 +131,9 @@ public class ProductDAO {
         ResultSet resultSet = statement.executeQuery();
 
         while (resultSet.next()) {
-            Product product = new Product(resultSet.getString(2),
+            Product product = new Product(
+                    resultSet.getInt(1),
+                    resultSet.getString(2),
                     resultSet.getString(3),
                     resultSet.getDouble(4),
                     resultSet.getInt(5),
@@ -127,7 +153,9 @@ public class ProductDAO {
         ResultSet resultSet = statement.executeQuery();
 
         if (resultSet.next()) {
-            Product product = new Product(resultSet.getString(2),
+            Product product = new Product(
+                    resultSet.getInt(1),
+                    resultSet.getString(2),
                     resultSet.getString(3),
                     resultSet.getDouble(4),
                     resultSet.getInt(5),

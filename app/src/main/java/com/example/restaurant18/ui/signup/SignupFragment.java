@@ -21,6 +21,7 @@ import com.example.restaurant18.DAO.UserDAO;
 import com.example.restaurant18.LoginSignupActivity;
 import com.example.restaurant18.R;
 import com.example.restaurant18.entity.User;
+import com.example.restaurant18.utils.DatabaseHandler;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -36,10 +37,6 @@ public class SignupFragment extends Fragment {
     private EditText editTextEmailSignup, editTextPasswordSignup, editTextPasswordConfirmSignup, editTextFirstName, editTextLastName, editTextBirthDate;
     private Button buttonSignUp;
 
-    private static final String DRIVER = "oracle.jdbc.driver.OracleDriver";
-    private static final String URL = "jdbc:oracle:thin:@192.168.100.34:1521:xe";
-    private static final String USERNAME = "raisa";
-    private static final String PASSWORD = "Sasakisan";
     private Connection connection;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -125,11 +122,8 @@ public class SignupFragment extends Fragment {
         try
         {
             User auxUser;
-            StrictMode.ThreadPolicy threadPolicy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(threadPolicy);
 
-            Class.forName(DRIVER);
-            connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            connection = DatabaseHandler.createDbConn();
 
             UserDAO userDAO = new UserDAO(connection);
 
