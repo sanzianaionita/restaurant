@@ -9,18 +9,23 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.restaurant18.DAO.UserDAO;
 import com.example.restaurant18.MainActivity;
 import com.example.restaurant18.R;
 import com.example.restaurant18.databinding.FragmentProfileSettingsBinding;
 import com.example.restaurant18.entity.User;
+import com.example.restaurant18.utils.DatabaseHandler;
 
+import java.sql.Connection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -28,9 +33,11 @@ public class ProfileSettingsFragment extends Fragment {
 
     private RadioGroup radioGroup;
     private RadioButton radioButtonMr, radioButtonMrs;
-    private EditText editTextEmail, editTextPhone, editTextAddress, editTextFirstName, editTextLastName, editTextBirthDate;
+    private EditText editTextFirstName, editTextLastName, editTextBirthDate;
+    private TextView editTextEmail;
     private Button buttonSaveChanges;
     private User user;
+    Connection connection;
 
     private FragmentProfileSettingsBinding binding;
 
@@ -49,23 +56,20 @@ public class ProfileSettingsFragment extends Fragment {
         editTextEmail = root.findViewById(R.id.et_profileSettingsEmail);
         editTextFirstName = root.findViewById(R.id.et_profileSettingsFirstName);
         editTextLastName = root.findViewById(R.id.et_profileSettingsLastName);
-        //editTextPhone = root.findViewById(R.id.et_profileSettingsPhone);
-        //editTextAddress = root.findViewById(R.id.et_profileSettingsAddress);
         editTextBirthDate = root.findViewById(R.id.et_profileSettingsBirthDate);
         buttonSaveChanges = root.findViewById(R.id.b_profileSettingsSave);
         user = ((MainActivity)getActivity()).getUser();
 
-        /*
-        if(user.getSex().equals("Mr"))
+
+
+        if(user.getAppellative().equalsIgnoreCase("mr"))
             radioButtonMr.setChecked(true);
         else
             radioButtonMrs.setChecked(true);
-        editTextFirstName.setText(user.getPrenume());
-        editTextLastName.setText(user.getNume());
+        editTextFirstName.setText(user.getFirstname());
+        editTextLastName.setText(user.getLastname());
         editTextEmail.setText(user.getEmail());
-        editTextPhone.setText(user.getPhoneNumber());
         editTextBirthDate.setText(user.getBirthDate());
-        editTextAddress.setText(user.getAddress());*/
 
 
         buttonSaveChanges.setOnClickListener(new View.OnClickListener() {
@@ -77,32 +81,21 @@ public class ProfileSettingsFragment extends Fragment {
                 {
                     if(checkIfBirthDateIsValid())
                     {
-                        if(validatePhoneNumber())
-                        {
-                            String firstName, lastName, appellative, email, phoneNumber, birthDate, address;
-                            if(radioButtonMr.isChecked())
-                                appellative = "Mr";
-                            else
-                                appellative = "Mrs";
-                            firstName = editTextFirstName.getText().toString().trim();
-                            lastName = editTextLastName.getText().toString().trim();
-                            email = editTextEmail.getText().toString().trim();
-                            phoneNumber = editTextPhone.getText().toString().trim();
-                            birthDate = editTextBirthDate.getText().toString().trim();
-                            address = editTextAddress.getText().toString().trim();
-                            SaveChanges(lastName,firstName,appellative,
-                                    address,phoneNumber,birthDate,user);
-                        }
+                        String firstName, lastName, appellative, birthDate;
+                        if(radioButtonMr.isChecked())
+                            appellative = "Mr";
                         else
-                            editTextPhone.setError("Please enter a valid phone number");
+                            appellative = "Mrs";
+                        firstName = editTextFirstName.getText().toString().trim();
+                        lastName = editTextLastName.getText().toString().trim();
+                        birthDate = editTextBirthDate.getText().toString().trim();
+                        SaveChanges(lastName,firstName,appellative,birthDate,user);
                     }
                     else
                         editTextBirthDate.setError("Please enter a valid date");
                 }
                 else
                 {
-                    if(editTextEmail.getText().toString().isEmpty())
-                        editTextEmail.setError("Please insert your email address");
                     if(editTextFirstName.getText().toString().isEmpty())
                         editTextFirstName.setError("Please insert your first name");
                     if(editTextLastName.getText().toString().isEmpty())
@@ -123,7 +116,7 @@ public class ProfileSettingsFragment extends Fragment {
 
     public boolean checkIfBirthDateIsValid() {
         String date = editTextBirthDate.getText().toString();
-        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         if(date.isEmpty())
             return true;
         else
@@ -139,14 +132,6 @@ public class ProfileSettingsFragment extends Fragment {
 
     }
 
-    public boolean validatePhoneNumber()
-    {
-        if(editTextPhone.getText().toString().length()>0 && editTextPhone.getText().toString().length()<10)
-            return false;
-        else
-            return true;
-    }
-
     public boolean emptyFields()
     {
         boolean isAnyFieldEmpty = false;
@@ -157,19 +142,27 @@ public class ProfileSettingsFragment extends Fragment {
         return isAnyFieldEmpty;
     }
 
-    private void SaveChanges(String lastName, String firstName, String sex, String address,
-                             String phoneNumber, String birthDate, User user)
+    private void SaveChanges(String lastName, String firstName, String appellative, String birthDate, User user)
     {
         try
         {
-            /*user.setNume(lastName);
-            user.setPrenume(firstName);
-            user.setPhoneNumber(phoneNumber);
-            user.setSex(sex);
-            user.setAddress(address);*/
+
+            String[] fieldsToUpdate = new String[]{"firstname", "lastname", "appellative", "date_of_birth"};
+            String[] values = new String[]{firstName, lastName, appellative, birthDate};
+
+            connection = DatabaseHandler.createDbConn();
+            UserDAO userDAO = new UserDAO(connection);
+            userDAO.editUser(user.getId(), fieldsToUpdate, values);
+
+
+            user.setLastname(lastName);
+            user.setFirstname(firstName);
+            user.setAppellative(appellative);
             user.setBirthDate(birthDate);
             Toast.makeText(getContext(), "Changes saved", Toast.LENGTH_SHORT).show();
-            Navigation.findNavController(getActivity(), R.id.nav_profile).navigate(R.id.action_nav_profile_to_nav_home);
+            MainActivity main = (MainActivity) getActivity();
+
+            Navigation.findNavController(main, R.id.nav_profile).navigate(R.id.action_nav_profile_to_nav_home);
         }
         catch (Exception e)
         {

@@ -132,7 +132,15 @@ public class UserDAO {
         for (int i=0; i<fieldsToUpdate.length; i++){
             String field = fieldsToUpdate[i];
             String value = values[i];
-            query += field + " = " + value;
+            if(!field.equals("date_of_birth")){
+                query += field + " = '" + value+"'";
+            } else{
+                query += field + " = TO_DATE('" + value+"', 'dd-MM-yyyy')";
+            }
+
+            if(i != fieldsToUpdate.length - 1){
+                query += ", ";
+            }
         }
 
 

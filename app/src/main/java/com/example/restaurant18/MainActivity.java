@@ -14,6 +14,8 @@ import com.example.restaurant18.entity.User;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imageViewUser;
     private TextView textViewUserName, textViewEmail;
     private User user;
+    private Boolean guest_received;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,16 +51,16 @@ public class MainActivity extends AppCompatActivity {
         //getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
-
-
         Intent intent = getIntent();
         user = (User) getIntent().getSerializableExtra("user");
-        Boolean guest_received = intent.getBooleanExtra("guest", false);
+        guest_received = intent.getBooleanExtra("guest", false);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMain.toolbar);
+
+
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
@@ -87,9 +90,6 @@ public class MainActivity extends AppCompatActivity {
             textViewEmail.setText("guest");
         }
 
-
-
-
         if(guest_received)
         {
             navigationView.getMenu().findItem(R.id.nav_favorite_product).setEnabled(false);
@@ -97,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
             navigationView.getMenu().findItem(R.id.nav_reservation).setEnabled(false);
             navigationView.getMenu().findItem(R.id.nav_profile).setEnabled(false);
         }
-
 
         navigationView.getMenu().findItem(R.id.nav_logout).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener()
         {
@@ -108,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
 
     }
 
