@@ -46,7 +46,7 @@ public class OrderDAO {
         }
 
         PreparedStatement statement = connection.prepareStatement(statementQuery);
-        Log.v("test","test1992111");
+//        Log.v("test","test1992111");
         int id = getLastID();
         statement.setInt(1, id);
         order.setId(id);
@@ -65,7 +65,7 @@ public class OrderDAO {
 
             connection.commit();
         }catch (SQLException e){
-            Log.v("testOrder",e.getMessage());
+//            Log.v("testOrder",e.getMessage());
             return false;
         }
         return true;

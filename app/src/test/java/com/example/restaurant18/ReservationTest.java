@@ -4,38 +4,38 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import android.util.Log;
-
-import com.example.restaurant18.DAO.OrderDAO;
-import com.example.restaurant18.entity.Order;
+import com.example.restaurant18.DAO.ReservationDAO;
 import com.example.restaurant18.entity.Reservation;
-
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.commons.logging.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Logger;
 
-public class ComandaTest {
+public class ReservationTest {
 
-    static OrderDAO orderDAO;
     static Connection connection;
+    static ReservationDAO reservationDAO;
+
 
     @BeforeAll
     public static void setup(){
+
         connection = mock(Connection.class);
-        orderDAO = new OrderDAO(connection);
+        reservationDAO = new ReservationDAO(connection);
     }
 
     @Test
-    public void testCreateOrder_created() throws SQLException {
+    public void createReservationTest_created() throws SQLException {
 
-        String statementQuery = "INSERT INTO comanda VALUES (?,?,TO_DATE(?,'DD-MM-YYYY'),?,?,?)";
+        String statementQuery = "INSERT INTO rezervare VALUES (?,?,TO_DATE(?,'DD-MM-YYYY'),?,?,?,?)";
 
         PreparedStatement preparedStatementMocked = mock(PreparedStatement.class);
         Statement statementMocked = mock(Statement.class);
@@ -43,18 +43,17 @@ public class ComandaTest {
 
         when(connection.prepareStatement(statementQuery)).thenReturn(preparedStatementMocked);
         when(connection.createStatement()).thenReturn(statementMocked);
-        when(statementMocked.executeQuery("SELECT MAX(id) FROM comanda")).thenReturn(resultSetMocked);
+        when(statementMocked.executeQuery("SELECT MAX(id) FROM rezervare")).thenReturn(resultSetMocked);
         when(resultSetMocked.getInt(any())).thenReturn(1);
 
-        boolean response = orderDAO.createOrder(new Order(1, "test", "test", "test", "test"));
+        boolean response = reservationDAO.createReservation(new Reservation(1, "test", 1, 1, 1, "test"));
 
         Assertions.assertTrue(response);
     }
 
     @Test
-    public void testCreateOrder_notCreated() throws SQLException {
-
-        String statementQuery = "INSERT INTO comanda VALUES (?,?,TO_DATE(?,'DD-MM-YYYY'),?,?,?)";
+    public void createReservationTest_notCreated() throws SQLException {
+        String statementQuery = "INSERT INTO rezervare VALUES (?,?,TO_DATE(?,'DD-MM-YYYY'),?,?,?,?)";
 
         PreparedStatement preparedStatementMocked = mock(PreparedStatement.class);
         Statement statementMocked = mock(Statement.class);
@@ -62,12 +61,13 @@ public class ComandaTest {
 
         when(connection.prepareStatement(statementQuery)).thenReturn(preparedStatementMocked);
         when(connection.createStatement()).thenReturn(statementMocked);
-        when(statementMocked.executeQuery("SELECT MAX(id) FROM comanda")).thenReturn(resultSetMocked);
+        when(statementMocked.executeQuery("SELECT MAX(id) FROM rezervare")).thenReturn(resultSetMocked);
         when(resultSetMocked.getInt(any())).thenReturn(1);
         when(preparedStatementMocked.executeQuery()).thenThrow(new SQLException("test"));
 
-        boolean response = orderDAO.createOrder(new Order(1, "test", "test", "test", "test"));
+        boolean response = reservationDAO.createReservation(new Reservation(1, "test", 1, 1, 1, "test"));
 
         Assertions.assertFalse(response);
     }
+
 }
